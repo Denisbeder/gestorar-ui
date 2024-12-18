@@ -5,7 +5,6 @@ import {useHTTP} from "@/composable/useHTTP.ts";
 const http = useHTTP();
 
 export const useUserStore = defineStore('user', () => {
-  const retryGetUser = ref(true);
   const user = ref();
   const isAuthenticated = ref(false);
 
@@ -17,5 +16,5 @@ export const useUserStore = defineStore('user', () => {
       isAuthenticated.value = true;
   }
 
-  return { user, isAuthenticated, getUser, retryGetUser }
+  return { user, isAuthenticated, getUser }
 })

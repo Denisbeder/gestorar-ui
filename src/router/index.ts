@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from "@/stores/user.ts";
+import { useCookies } from '@vueuse/integrations/useCookies';
+
+const cookies = useCookies()
 
 declare module 'vue-router' {
   interface RouteMeta {
@@ -31,35 +34,36 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const userStore = useUserStore();
+  const guestPagesMap = ['Login'];
+  const requiresAuth = to.meta.requiresAuth;
+  const isAuthenticated = userStore.isAuthenticated;
+  const hasXSRFToken = cookies.get('XSRF-TOKEN') !== undefined;
+  const redirectToLogin = { name: 'Login', query: { redirect: to.fullPath } };
+  const redirectToDashboard = { name: 'Dashboard' };
 
-  if (to.meta.requiresAuth && !userStore.isAuthenticated) {
-    try {
-      await userStore.getUser();
-    } catch (error) {
-      userStore.retryGetUser = false;
-
-      return {
-        name: 'Login',
-        query: { redirect: to.fullPath },
-      }
-    }
+  if (requiresAuth && (!isAuthenticated || !hasXSRFToken)) {
+    return redirectToLogin;
   }
 
-  if (to.name === 'Login' && userStore.isAuthenticated) {
-    return false;
+  if (guestPagesMap.includes(to.name) && isAuthenticated && hasXSRFToken) {
+    return redirectToDashboard;
   }
 
-  if (to.name === 'Login' && !userStore.isAuthenticated && userStore.retryGetUser) {
-      try {
-        await userStore.getUser();
-
-        return {
-          name: 'Dashboard'
-        }
-      } catch (error) {
-        return;
-      }
+  if ((guestPagesMap.includes(to.name) && !isAuthenticated && hasXSRFToken) || (requiresAuth && !isAuthenticated && hasXSRFToken)) {
+    return getUser(redirectToDashboard, redirectToLogin);
   }
-})
+});
+
+async function getUser(redirectToOnSuccess, redirectToOnFail) {
+  const userStore = useUserStore();
+
+  try {
+    await userStore.getUser();
+  } catch {
+    return redirectToOnFail;
+  }
+
+  return redirectToOnSuccess;
+}
 
 export default router
