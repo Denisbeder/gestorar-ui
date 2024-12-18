@@ -1,14 +1,21 @@
-import {computed, ref} from 'vue'
-import { defineStore } from 'pinia'
+import { ref} from 'vue';
+import { defineStore } from 'pinia';
+import {useHTTP} from "@/composable/useHTTP.ts";
+
+const http = useHTTP();
 
 export const useUserStore = defineStore('user', () => {
-  const isAuthenticated = computed(() => {
-    return Boolean(JSON.parse(localStorage.getItem('is_authenticated')));
-  })
+  const retryGetUser = ref(true);
+  const user = ref();
+  const isAuthenticated = ref(false);
 
-  function setIsAuthenticated(value) {
-    localStorage.setItem('is_authenticated', value);
+  async function getUser() {
+      const response = await http.get('/api/user');
+
+      user.value = response.data;
+
+      isAuthenticated.value = true;
   }
 
-  return { isAuthenticated, setIsAuthenticated }
+  return { user, isAuthenticated, getUser, retryGetUser }
 })

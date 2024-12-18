@@ -1,32 +1,42 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import {reactive, ref} from 'vue'
 import { useHTTP, useCSRF } from '@/composable/useHTTP.ts'
 import { useErrorHandle } from "@/composable/useErrorHandle.ts";
 import { useUserStore } from "@/stores/user.ts";
+import {useRouter, useRoute} from "vue-router";
 
 const http = useHTTP()
 const errorHandle = useErrorHandle()
 const userStore = useUserStore();
+const router = useRouter();
+const route = useRoute();
 
-const form = reactive({ email: '', password: '' })
+const isLoading = ref(false)
+const form = reactive({ email: 'admin@email.com', password: 'password' })
 
 async function handleSubmit() {
-  await useCSRF()
+  isLoading.value = true;
 
-  http.post('/login', form).then((response) => {
-    console.log('then', response)
-    userStore.setIsAuthenticated(true);
-  }).catch(errorHandle.show)
+  try {
+    await http.post('/login', form);
+    await userStore.getUser();
+    await router.push(route.query?.redirect ?? 'dashboard');
+  } catch (error) {
+    errorHandle.show(error);
+  } finally {
+    isLoading.value = false;
+  }
 }
+
 </script>
 
 <template>
   <main>
     <form @submit.prevent="handleSubmit">
-      <input type="text" name="email" autocomplete="email" v-model="form.email" />
-      <input type="password" name="password" autocomplete="current-password" v-model="form.password" />
+      <input :disabled="isLoading" type="text" name="email" autocomplete="email" v-model="form.email" />
+      <input :disabled="isLoading" type="password" name="password" autocomplete="current-password" v-model="form.password" />
 
-      <button type="submit">Enviar</button>
+      <button :disabled="isLoading" type="submit">Enviar</button>
     </form>
   </main>
 </template>
