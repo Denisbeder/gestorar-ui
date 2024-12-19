@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {reactive, ref} from 'vue'
-import { useHTTP, useCSRF } from '@/composable/useHTTP.ts'
+import { useHTTP } from '@/composable/useHTTP.ts'
 import { useErrorHandle } from "@/composable/useErrorHandle.ts";
 import { useUserStore } from "@/stores/user.ts";
 import {useRouter, useRoute} from "vue-router";
