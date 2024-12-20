@@ -15,7 +15,7 @@ function handleLogout() {
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/dashboard">Dashboard</RouterLink>
       <RouterLink to="/login">Entrar</RouterLink>
-      <buttoon @click="handleLogout">Sair</buttoon>
+      <button @click="handleLogout">Sair</button>
     </nav>
   </header>
 
