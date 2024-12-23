@@ -51,7 +51,7 @@ export function useHTTP() {
             displayError(error);
         }
 
-        console.debug(error);
+        //console.debug(error);
 
         throw error;
     }

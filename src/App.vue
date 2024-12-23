@@ -3,6 +3,7 @@
     import { useAuth } from '@/composable/useAuth.ts';
 
     const router = useRouter();
+    const { isAuthenticated } = useAuth();
 
     async function handleLogout() {
         await useAuth().logout();
@@ -16,7 +17,12 @@
             <RouterLink to="/">Home</RouterLink>
             <RouterLink to="/dashboard">Dashboard</RouterLink>
             <RouterLink to="/login">Entrar</RouterLink>
-            <button @click="handleLogout">Sair</button>
+            <button
+                v-if="isAuthenticated"
+                @click="handleLogout"
+            >
+                Sair
+            </button>
         </nav>
     </header>
 

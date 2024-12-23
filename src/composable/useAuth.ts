@@ -37,7 +37,7 @@ export function useAuth() {
             await http.post('/logout');
             state.user = null;
         } catch (error: AxiosError) {
-            displayError(error);
+            errorHandle(error);
         }
     }
 
