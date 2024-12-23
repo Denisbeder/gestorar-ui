@@ -1,14 +1,15 @@
-import '@/assets/main.css'
+import '@/assets/main.css';
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import { useAuth } from '@/composable/useAuth.ts';
+import App from './App.vue';
+import router from './router';
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+const { getUser } = useAuth();
+const app = createApp(App);
 
-import App from './App.vue'
-import router from './router'
-
-const app = createApp(App)
-
-app.use(createPinia())
-app.use(router)
-
-app.mount('#app')
+getUser().finally(() => {
+    app.use(createPinia());
+    app.use(router);
+    app.mount('#app');
+});

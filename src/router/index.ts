@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory, type RouteLocationNormalized, type Router } from 'vue-router';
-import { useUserStore } from '@/stores/user.ts';
-import { useHTTPAuth } from '@/composable/useHTTPAuth.ts';
+import { useAuth } from '@/composable/useAuth.ts';
 
 declare module 'vue-router' {
     interface RouteMeta {
@@ -31,30 +30,20 @@ const router: Router = createRouter({
 });
 
 router.beforeResolve(async (to: RouteLocationNormalized) => {
-    const httpAuth = useHTTPAuth();
-    const userStore = useUserStore();
+    const { isAuthenticated } = useAuth();
+
     const guestPagesMap = ['Login'];
     const isGuestPage = guestPagesMap.includes(to.name as string);
     const requiresAuth = to.meta.requiresAuth;
     const redirectToLogin = { name: 'Login', query: { redirect: to.fullPath } };
     const redirectToDashboard = { name: 'Dashboard' };
 
-    if (requiresAuth || isGuestPage) {
-        if (userStore.isAuthenticated && isGuestPage) {
-            return redirectToDashboard;
-        }
+    if (isAuthenticated.value && isGuestPage) {
+        return redirectToDashboard;
+    }
 
-        try {
-            await httpAuth.getUser();
-
-            if (userStore.isAuthenticated && isGuestPage) {
-                return redirectToDashboard;
-            }
-        } catch {
-            if (!userStore.isAuthenticated && requiresAuth) {
-                return redirectToLogin;
-            }
-        }
+    if (!isAuthenticated.value && requiresAuth) {
+        return redirectToLogin;
     }
 });
 

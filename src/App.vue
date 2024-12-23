@@ -1,30 +1,31 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import { useCookies } from '@vueuse/integrations/useCookies';
+    import { RouterLink, RouterView, useRouter } from 'vue-router';
+    import { useAuth } from '@/composable/useAuth.ts';
 
-const cookies = useCookies()
+    const router = useRouter();
 
-function handleLogout() {
-  cookies.remove('XSRF-TOKEN')
-}
+    async function handleLogout() {
+        await useAuth().logout();
+        await router.push({ name: 'Login' });
+    }
 </script>
 
 <template>
-  <header>
-    <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/dashboard">Dashboard</RouterLink>
-      <RouterLink to="/login">Entrar</RouterLink>
-      <button @click="handleLogout">Sair</button>
-    </nav>
-  </header>
+    <header>
+        <nav>
+            <RouterLink to="/">Home</RouterLink>
+            <RouterLink to="/dashboard">Dashboard</RouterLink>
+            <RouterLink to="/login">Entrar</RouterLink>
+            <button @click="handleLogout">Sair</button>
+        </nav>
+    </header>
 
-  <RouterView />
+    <RouterView />
 </template>
 
 <style scoped>
-nav {
-  display: flex;
-  gap: 1rem;
-}
+    nav {
+        display: flex;
+        gap: 1rem;
+    }
 </style>

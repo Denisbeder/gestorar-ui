@@ -1,8 +1,11 @@
 <script setup lang="ts">
     import { reactive, ref } from 'vue';
-    import { useHTTPAuth } from '@/composable/useHTTPAuth.ts';
+    import { useAuth } from '@/composable/useAuth.ts';
+    import { useRoute, useRouter } from 'vue-router';
 
-    const httpAuth = useHTTPAuth();
+    const httpAuth = useAuth();
+    const router = useRouter();
+    const route = useRoute();
 
     const isLoading = ref<boolean>(false);
     const form = reactive<CredentialsType>({ email: 'admin@email.com', password: 'password' });
@@ -12,6 +15,8 @@
 
         try {
             await httpAuth.login(form);
+
+            await router.push({ path: route.query?.redirect ?? '/dashboard' });
         } finally {
             isLoading.value = false;
         }
