@@ -17,12 +17,10 @@
             <RouterLink to="/">Home</RouterLink>
             <RouterLink to="/dashboard">Dashboard</RouterLink>
             <RouterLink to="/login">Entrar</RouterLink>
-            <button
-                v-if="isAuthenticated"
-                @click="handleLogout"
-            >
-                Sair
-            </button>
+            <template v-if="isAuthenticated">
+                <RouterLink to="/customers/create">Cadastrar Cliente</RouterLink>
+                <button @click="handleLogout">Sair</button>
+            </template>
         </nav>
     </header>
 

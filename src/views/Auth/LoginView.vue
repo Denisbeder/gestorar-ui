@@ -10,13 +10,13 @@
     const isLoading = ref<boolean>(false);
     const form = reactive<CredentialsType>({ email: 'admin@email.com', password: 'password' });
 
-    async function handleSubmit() {
+    async function onSubmit() {
         isLoading.value = true;
 
         try {
             await httpAuth.login(form);
 
-            await router.push({ path: route.query?.redirect ?? '/dashboard' });
+            await router.push((route.query?.redirect ?? '/dashboard') as string);
         } finally {
             isLoading.value = false;
         }
@@ -25,7 +25,7 @@
 
 <template>
     <main>
-        <form @submit.prevent="handleSubmit">
+        <form @submit.prevent="onSubmit">
             <input
                 v-model="form.email"
                 :disabled="isLoading"

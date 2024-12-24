@@ -3,7 +3,8 @@ import { useAuth } from '@/composable/useAuth.ts';
 
 declare module 'vue-router' {
     interface RouteMeta {
-        requiresAuth: boolean;
+        requiresAuth?: boolean;
+        guest?: boolean;
     }
 }
 
@@ -18,7 +19,8 @@ const router: Router = createRouter({
         {
             path: '/login',
             name: 'Login',
-            component: () => import('../views/LoginView.vue'),
+            component: () => import('../views/Auth/LoginView.vue'),
+            meta: { guest: true },
         },
         {
             path: '/dashboard',
@@ -26,15 +28,25 @@ const router: Router = createRouter({
             component: () => import('../views/DashboardView.vue'),
             meta: { requiresAuth: true },
         },
+        {
+            path: '/customers/create',
+            name: 'CustomersCreate',
+            component: () => import('../views/Customer/CreateView.vue'),
+            meta: { requiresAuth: true },
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            name: 'NotFound',
+            component: import('../views/NotFoundView.vue'),
+        },
     ],
 });
 
 router.beforeResolve(async (to: RouteLocationNormalized) => {
     const { isAuthenticated } = useAuth();
 
-    const guestPagesMap = ['Login'];
-    const isGuestPage = guestPagesMap.includes(to.name as string);
     const requiresAuth = to.meta.requiresAuth;
+    const isGuestPage = to.meta.guest;
     const redirectToLogin = { name: 'Login', query: { redirect: to.fullPath } };
     const redirectToDashboard = { name: 'Dashboard' };
 
