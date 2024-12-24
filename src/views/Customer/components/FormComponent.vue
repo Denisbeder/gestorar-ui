@@ -22,8 +22,9 @@
     };
 
     type ContactModelType = {
-        value: string;
         type?: ContactTypeType;
+        value: string;
+        details?: string;
     };
 
     type PersonModelType = {
@@ -40,7 +41,6 @@
         cnpj?: number | null;
         contacts: ContactModelType[];
         addresses: AddressModelType[];
-        contact_person: PersonModelType | null;
     };
 
     type FormType = {
@@ -80,7 +80,6 @@
                 type: 'email',
             },
         ],
-        contact_person: null,
     });
 
     function onSubmit() {
@@ -110,7 +109,7 @@
         });
     }
 
-    function handleRemoveContact(index) {
+    function handleRemoveContact(index: number) {
         form.contacts.splice(index, 1);
     }
 </script>
@@ -124,6 +123,7 @@
                 <label class="form-control">
                     CPF
                     <input
+                        v-model="form.type"
                         type="radio"
                         name="type"
                         value="cpf"
@@ -133,6 +133,7 @@
                 <label class="form-control">
                     CNPJ
                     <input
+                        v-model="form.type"
                         type="radio"
                         name="type"
                         value="cnpj"
@@ -141,38 +142,40 @@
             </div>
         </fieldset>
 
-        <fieldset>
+        <fieldset v-if="form.type === 'cpf'">
             <legend>Dados da pessoa</legend>
 
-            <label class="form-control">
-                Primeiro nome
-                <input
-                    v-model="form.first_name"
-                    type="text"
-                    name="first_name"
-                />
-            </label>
+            <div class="form-control inline">
+                <label class="form-control">
+                    Primeiro nome
+                    <input
+                        v-model="form.first_name"
+                        type="text"
+                        name="first_name"
+                    />
+                </label>
 
-            <label class="form-control">
-                Sobrenome
-                <input
-                    v-model="form.last_name"
-                    type="text"
-                    name="last_name"
-                />
-            </label>
+                <label class="form-control">
+                    Sobrenome
+                    <input
+                        v-model="form.last_name"
+                        type="text"
+                        name="last_name"
+                    />
+                </label>
 
-            <label class="form-control">
-                CPF
-                <input
-                    v-model="form.cpf"
-                    type="text"
-                    name="cpf"
-                />
-            </label>
+                <label class="form-control">
+                    CPF
+                    <input
+                        v-model="form.cpf"
+                        type="text"
+                        name="cpf"
+                    />
+                </label>
+            </div>
         </fieldset>
 
-        <fieldset>
+        <fieldset v-if="form.type === 'cnpj'">
             <legend>Dados da empresa</legend>
 
             <label class="form-control">
@@ -184,23 +187,28 @@
                 />
             </label>
 
-            <label class="form-control">
-                Razão Social
-                <input
-                    v-model="form.legal_name"
-                    type="text"
-                    name="legal_name"
-                />
-            </label>
+            <div class="form-control inline">
+                <label
+                    class="form-control"
+                    style="max-width: 30%"
+                >
+                    CNPJ
+                    <input
+                        v-model="form.cnpj"
+                        type="text"
+                        name="cnpj"
+                    />
+                </label>
 
-            <label class="form-control">
-                CNPJ
-                <input
-                    v-model="form.cnpj"
-                    type="text"
-                    name="cnpj"
-                />
-            </label>
+                <label class="form-control">
+                    Razão Social
+                    <input
+                        v-model="form.legal_name"
+                        type="text"
+                        name="legal_name"
+                    />
+                </label>
+            </div>
         </fieldset>
 
         <fieldset>
@@ -217,9 +225,21 @@
                     >
                         <input
                             v-model="contact.value"
-                            placeholder="Digite um Telefone ou E-mail"
+                            placeholder="Telefone ou E-mail"
                             type="text"
-                            :name="`contact[${index}]`"
+                            :name="`contact_value[${index}]`"
+                        />
+                    </label>
+
+                    <label
+                        class="form-control"
+                        style="max-width: 20%"
+                    >
+                        <input
+                            v-model="contact.details"
+                            placeholder="Detalhes do contato"
+                            type="text"
+                            :name="`contact_details[${index}]`"
                         />
                     </label>
 
@@ -242,7 +262,7 @@
         </fieldset>
 
         <fieldset>
-            <legend>Endereço</legend>
+            <legend>Endereços</legend>
 
             <fieldset
                 v-for="(address, index) in form.addresses"
