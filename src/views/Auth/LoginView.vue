@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { reactive, ref } from 'vue';
-    import { useAuth } from '@/composable/useAuth.ts';
+    import { useAuthService } from '@/composable/useAuthService.ts';
     import { useRoute, useRouter } from 'vue-router';
 
-    const httpAuth = useAuth();
+    const authService = useAuthService();
     const router = useRouter();
     const route = useRoute();
 
@@ -14,7 +14,7 @@
         isLoading.value = true;
 
         try {
-            await httpAuth.login(form);
+            await authService.login(form);
 
             await router.push((route.query?.redirect ?? '/dashboard') as string);
         } finally {

@@ -43,11 +43,11 @@ export function useHTTP() {
     }
 
     function errorHandle(error: AxiosError<AxiosErrorDataType>, silent = false) {
-        if (Object.hasOwn(error, 'status') && error.status < 400) {
+        if (Object.hasOwn(error, 'status') && error.status! < 400) {
             return;
         }
 
-        if (Object.hasOwn(error, 'status') && error.status >= 400 && error.status < 500 && silent === false) {
+        if (Object.hasOwn(error, 'status') && error.status! >= 400 && error.status! < 500 && silent === false) {
             displayError(error);
         }
 

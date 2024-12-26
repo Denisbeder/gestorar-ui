@@ -1,12 +1,12 @@
 <script setup lang="ts">
     import { RouterLink, RouterView, useRouter } from 'vue-router';
-    import { useAuth } from '@/composable/useAuth.ts';
+    import { useAuthService } from '@/composable/useAuthService.ts';
 
     const router = useRouter();
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated } = useAuthService();
 
     async function handleLogout() {
-        await useAuth().logout();
+        await useAuthService().logout();
         await router.push({ name: 'Login' });
     }
 </script>

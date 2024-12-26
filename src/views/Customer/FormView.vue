@@ -1,5 +1,11 @@
 <script setup lang="ts">
-    import { reactive, toRaw } from 'vue';
+    import { reactive, ref, withDefaults } from 'vue';
+    import { toast } from 'vue3-toastify';
+    import { useHTTP } from '@/composable/useHTTP.ts';
+    import { useCustomerService } from '@/composable/useCustomerService.ts';
+
+    const customerService = useCustomerService();
+    const { errorHandle } = useHTTP();
 
     const ADDRESS_TAG_ENUM = {
         home: 'Casa',
@@ -7,50 +13,8 @@
         billing: 'Cobrança',
     };
 
-    type AddressTypeType = 'home' | 'commercial' | 'billing';
-    type ContactTypeType = 'phone' | 'email';
-
-    type AddressModelType<T = AddressTypeType> = {
-        type?: T;
-        zip_code?: number | null;
-        street?: string;
-        number?: string;
-        district?: string;
-        city?: string;
-        state?: string;
-        complement?: string;
-    };
-
-    type ContactModelType = {
-        type?: ContactTypeType;
-        value: string;
-        details?: string;
-    };
-
-    type PersonModelType = {
-        first_name: string;
-        last_name?: string | null;
-        cpf?: number | null;
-        contacts: ContactModelType[];
-        addresses: AddressModelType[];
-    };
-
-    type CompanyModelType = {
-        name: string;
-        legal_name?: string | null;
-        cnpj?: number | null;
-        contacts: ContactModelType[];
-        addresses: AddressModelType[];
-    };
-
-    type FormType = {
-        type: 'cpf' | 'cnpj';
-    } & PersonModelType &
-        CompanyModelType;
-
-    const emit = defineEmits(['on-submit']);
-
-    const form = reactive<FormType>({
+    const isLoading = ref<boolean>(false);
+    const form = reactive<CustomerFormType>({
         type: 'cpf',
         first_name: '',
         last_name: '',
@@ -83,7 +47,20 @@
     });
 
     function onSubmit() {
-        emit('on-submit', toRaw(formPF));
+        isLoading.value = true;
+
+        toast.clearAll();
+
+        customerService
+            .store(form)
+            .then((response) => {
+                console.log(response);
+                toast.success('Cliente salvo');
+            })
+            .catch((error) => {
+                errorHandle(error);
+            })
+            .finally(() => (isLoading.value = false));
     }
 
     function handleAddAddress() {
@@ -116,7 +93,7 @@
 
 <template>
     <form @submit.prevent="onSubmit">
-        <fieldset>
+        <fieldset :disabled="isLoading">
             <legend>Tipo de cadastro</legend>
 
             <div class="form-control inline">
@@ -142,7 +119,10 @@
             </div>
         </fieldset>
 
-        <fieldset v-if="form.type === 'cpf'">
+        <fieldset
+            v-if="form.type === 'cpf'"
+            :disabled="isLoading"
+        >
             <legend>Dados da pessoa</legend>
 
             <div class="form-control inline">
@@ -175,7 +155,10 @@
             </div>
         </fieldset>
 
-        <fieldset v-if="form.type === 'cnpj'">
+        <fieldset
+            v-if="form.type === 'cnpj'"
+            :disabled="isLoading"
+        >
             <legend>Dados da empresa</legend>
 
             <label class="form-control">
@@ -211,7 +194,7 @@
             </div>
         </fieldset>
 
-        <fieldset>
+        <fieldset :disabled="isLoading">
             <legend>Contatos</legend>
 
             <template
@@ -261,7 +244,7 @@
             </button>
         </fieldset>
 
-        <fieldset>
+        <fieldset :disabled="isLoading">
             <legend>Endereços</legend>
 
             <fieldset
@@ -377,6 +360,7 @@
 
                 <button
                     type="button"
+                    :disabled="isLoading"
                     @click="handleRemoveAddress(index)"
                 >
                     Remover
@@ -391,7 +375,12 @@
             </button>
         </fieldset>
 
-        <button type="submit">Salvar</button>
+        <button
+            type="submit"
+            :disabled="isLoading"
+        >
+            Salvar
+        </button>
     </form>
 </template>
 

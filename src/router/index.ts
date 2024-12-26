@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, type RouteLocationNormalized, type Router } from 'vue-router';
-import { useAuth } from '@/composable/useAuth.ts';
+import { useAuthService } from '@/composable/useAuthService.ts';
 
 declare module 'vue-router' {
     interface RouteMeta {
@@ -31,7 +31,7 @@ const router: Router = createRouter({
         {
             path: '/customers/create',
             name: 'CustomersCreate',
-            component: () => import('../views/Customer/CreateView.vue'),
+            component: () => import('../views/Customer/FormView.vue'),
             meta: { requiresAuth: true },
         },
         {
@@ -43,7 +43,7 @@ const router: Router = createRouter({
 });
 
 router.beforeResolve(async (to: RouteLocationNormalized) => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated } = useAuthService();
 
     const requiresAuth = to.meta.requiresAuth;
     const isGuestPage = to.meta.guest;

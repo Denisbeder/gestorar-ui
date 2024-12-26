@@ -1,12 +1,12 @@
 import { computed, reactive } from 'vue';
 import { useHTTP } from '@/composable/useHTTP.ts';
-import { useRouter, useRoute } from 'vue-router';
+import type { AxiosError } from 'axios';
 
 const state = reactive({
     user: null,
 });
 
-export function useAuth() {
+export function useAuthService() {
     const { http, displayError, errorHandle } = useHTTP();
 
     const user = computed(() => state.user);
@@ -16,10 +16,10 @@ export function useAuth() {
         try {
             const { data } = await http.get('/api/user');
             state.user = data;
-        } catch (error: AxiosError) {
+        } catch (error) {
             state.user = null;
 
-            errorHandle(error, true);
+            errorHandle(error as AxiosError<AxiosErrorDataType>, true);
         }
     }
 
@@ -27,17 +27,17 @@ export function useAuth() {
         try {
             await http.post('/login', credentials);
             await getUser();
-        } catch (error: AxiosError) {
-            displayError(error);
+        } catch (error) {
+            displayError(error as AxiosError<AxiosErrorDataType>);
         }
     }
 
-    async function logout() {
+    async function logout(): Promise<void> {
         try {
             await http.post('/logout');
             state.user = null;
-        } catch (error: AxiosError) {
-            errorHandle(error);
+        } catch (error) {
+            errorHandle(error as AxiosError<AxiosErrorDataType>);
         }
     }
 
