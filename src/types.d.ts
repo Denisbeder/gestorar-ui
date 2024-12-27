@@ -27,7 +27,7 @@ type AddressModelType<T = AddressTypeType> = {
     zip_code?: number | null;
     street?: string;
     number?: string;
-    district?: string;
+    neighborhood?: string;
     city?: string;
     state?: string;
     complement?: string;

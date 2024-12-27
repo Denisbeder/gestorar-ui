@@ -28,7 +28,7 @@
                 zip_code: null,
                 street: '',
                 number: '',
-                district: '',
+                neighborhood: '',
                 city: '',
                 state: '',
                 complement: '',
@@ -69,7 +69,7 @@
             zip_code: null,
             street: '',
             number: '',
-            district: '',
+            neighborhood: '',
             city: '',
             state: '',
             complement: '',
@@ -324,9 +324,9 @@
                     <label class="form-control">
                         Bairro
                         <input
-                            v-model="address.district"
+                            v-model="address.neighborhood"
                             type="text"
-                            :name="`district[${index}]`"
+                            :name="`neighborhood[${index}]`"
                         />
                     </label>
 
