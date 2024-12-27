@@ -21,6 +21,7 @@ type UserType = {
 
 type AddressTypeType = 'home' | 'commercial' | 'billing';
 type ContactTypeType = 'phone' | 'email';
+type CustomerTypeType = 'cpf' | 'cnpj';
 
 type AddressModelType<T = AddressTypeType> = {
     type?: T;
@@ -56,6 +57,6 @@ type CompanyModelType = {
 };
 
 type CustomerFormType = {
-    type: 'cpf' | 'cnpj';
+    customer_type: CustomerTypeType;
 } & PersonModelType &
     CompanyModelType;

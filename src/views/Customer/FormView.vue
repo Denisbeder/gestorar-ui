@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { reactive, ref, withDefaults } from 'vue';
+    import { reactive, ref } from 'vue';
     import { toast } from 'vue3-toastify';
     import { useHTTP } from '@/composable/useHTTP.ts';
     import { useCustomerService } from '@/composable/useCustomerService.ts';
@@ -15,7 +15,7 @@
 
     const isLoading = ref<boolean>(false);
     const form = reactive<CustomerFormType>({
-        type: 'cpf',
+        customer_type: 'cpf',
         first_name: '',
         last_name: '',
         cpf: null,
@@ -100,7 +100,7 @@
                 <label class="form-control">
                     CPF
                     <input
-                        v-model="form.type"
+                        v-model="form.customer_type"
                         type="radio"
                         name="type"
                         value="cpf"
@@ -110,7 +110,7 @@
                 <label class="form-control">
                     CNPJ
                     <input
-                        v-model="form.type"
+                        v-model="form.customer_type"
                         type="radio"
                         name="type"
                         value="cnpj"
@@ -120,7 +120,7 @@
         </fieldset>
 
         <fieldset
-            v-if="form.type === 'cpf'"
+            v-if="form.customer_type === 'cpf'"
             :disabled="isLoading"
         >
             <legend>Dados da pessoa</legend>
@@ -156,7 +156,7 @@
         </fieldset>
 
         <fieldset
-            v-if="form.type === 'cnpj'"
+            v-if="form.customer_type === 'cnpj'"
             :disabled="isLoading"
         >
             <legend>Dados da empresa</legend>
