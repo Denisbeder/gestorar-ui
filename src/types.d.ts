@@ -25,7 +25,7 @@ type CustomerTypeType = 'cpf' | 'cnpj';
 
 type AddressModelType<T = AddressTypeType> = {
     type?: T;
-    zip_code?: number | null;
+    zipcode?: number | null;
     street?: string;
     number?: string;
     neighborhood?: string;
@@ -37,7 +37,7 @@ type AddressModelType<T = AddressTypeType> = {
 type ContactModelType = {
     type?: ContactTypeType;
     value: string;
-    details?: string;
+    description?: string;
 };
 
 type PersonModelType = {
@@ -57,6 +57,6 @@ type CompanyModelType = {
 };
 
 type CustomerFormType = {
-    customer_type: CustomerTypeType;
+    type: CustomerTypeType;
 } & PersonModelType &
     CompanyModelType;

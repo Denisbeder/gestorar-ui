@@ -15,7 +15,7 @@
 
     const isLoading = ref<boolean>(false);
     const form = reactive<CustomerFormType>({
-        customer_type: 'cpf',
+        type: 'cpf',
         first_name: '',
         last_name: '',
         cpf: null,
@@ -25,7 +25,7 @@
         addresses: [
             {
                 type: 'commercial',
-                zip_code: null,
+                zipcode: null,
                 street: '',
                 number: '',
                 neighborhood: '',
@@ -66,7 +66,7 @@
     function handleAddAddress() {
         form.addresses.push({
             type: 'home',
-            zip_code: null,
+            zipcode: null,
             street: '',
             number: '',
             neighborhood: '',
@@ -100,7 +100,7 @@
                 <label class="form-control">
                     CPF
                     <input
-                        v-model="form.customer_type"
+                        v-model="form.type"
                         type="radio"
                         name="type"
                         value="cpf"
@@ -110,7 +110,7 @@
                 <label class="form-control">
                     CNPJ
                     <input
-                        v-model="form.customer_type"
+                        v-model="form.type"
                         type="radio"
                         name="type"
                         value="cnpj"
@@ -120,7 +120,7 @@
         </fieldset>
 
         <fieldset
-            v-if="form.customer_type === 'cpf'"
+            v-if="form.type === 'cpf'"
             :disabled="isLoading"
         >
             <legend>Dados da pessoa</legend>
@@ -156,7 +156,7 @@
         </fieldset>
 
         <fieldset
-            v-if="form.customer_type === 'cnpj'"
+            v-if="form.type === 'cnpj'"
             :disabled="isLoading"
         >
             <legend>Dados da empresa</legend>
@@ -219,10 +219,10 @@
                         style="max-width: 20%"
                     >
                         <input
-                            v-model="contact.details"
+                            v-model="contact.description"
                             placeholder="Detalhes do contato"
                             type="text"
-                            :name="`contact_details[${index}]`"
+                            :name="`contact_description[${index}]`"
                         />
                     </label>
 
@@ -292,9 +292,9 @@
                     >
                         CEP
                         <input
-                            v-model="address.zip_code"
+                            v-model="address.zipcode"
                             type="text"
-                            :name="`zip_code[${index}]`"
+                            :name="`zipcode[${index}]`"
                         />
                     </label>
 
