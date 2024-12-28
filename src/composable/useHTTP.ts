@@ -42,19 +42,5 @@ export function useHTTP() {
         toast(msg, toastConfig as ToastOptions);
     }
 
-    function errorHandle(error: AxiosError<AxiosErrorDataType>, silent = false) {
-        if (Object.hasOwn(error, 'status') && error.status! < 400) {
-            return;
-        }
-
-        if (Object.hasOwn(error, 'status') && error.status! >= 400 && error.status! < 500 && silent === false) {
-            displayError(error);
-        }
-
-        //console.debug(error);
-
-        throw error;
-    }
-
-    return { http, displayError, errorHandle };
+    return { http, displayError };
 }

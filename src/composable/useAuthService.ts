@@ -7,7 +7,7 @@ const state = reactive({
 });
 
 export function useAuthService() {
-    const { http, displayError, errorHandle } = useHTTP();
+    const { http, displayError } = useHTTP();
 
     const user = computed(() => state.user);
     const isAuthenticated = computed(() => state.user !== null);
@@ -19,7 +19,7 @@ export function useAuthService() {
         } catch (error) {
             state.user = null;
 
-            errorHandle(error as AxiosError<AxiosErrorDataType>, true);
+            console.debug(error);
         }
     }
 
@@ -38,6 +38,11 @@ export function useAuthService() {
             state.user = null;
         } catch (error) {
             errorHandle(error as AxiosError<AxiosErrorDataType>);
+        }
+    }
+    function errorHandle(error: AxiosError<AxiosErrorDataType>): void {
+        if (Object.hasOwn(error, 'status') && error.status! >= 400 && error.status! < 500) {
+            displayError(error);
         }
     }
 

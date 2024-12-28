@@ -38,6 +38,7 @@ type ContactModelType = {
     type?: ContactTypeType;
     value: string;
     description?: string;
+    properties?: object;
 };
 
 type PersonModelType = {

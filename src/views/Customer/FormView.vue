@@ -1,11 +1,11 @@
 <script setup lang="ts">
-    import { reactive, ref } from 'vue';
+    import { reactive, ref, watch } from 'vue';
     import { toast } from 'vue3-toastify';
     import { useHTTP } from '@/composable/useHTTP.ts';
     import { useCustomerService } from '@/composable/useCustomerService.ts';
 
     const customerService = useCustomerService();
-    const { errorHandle } = useHTTP();
+    const { displayError } = useHTTP();
 
     const ADDRESS_TAG_ENUM = {
         home: 'Casa',
@@ -38,10 +38,16 @@
             {
                 value: '67996948065',
                 type: 'phone',
+                properties: {
+                    whatsapp: false,
+                },
             },
             {
                 value: 'gK7Y4@example.com',
                 type: 'email',
+                properties: {
+                    whatsapp: false,
+                },
             },
         ],
     });
@@ -53,13 +59,8 @@
 
         customerService
             .store(form)
-            .then((response) => {
-                console.log(response);
-                toast.success('Cliente salvo');
-            })
-            .catch((error) => {
-                errorHandle(error);
-            })
+            .then(() => toast.success('Cliente salvo'))
+            .catch((error) => displayError(error))
             .finally(() => (isLoading.value = false));
     }
 
@@ -83,11 +84,37 @@
     function handleAddContact() {
         form.contacts.push({
             value: '',
+            type: 'phone',
+            properties: {
+                whatsapp: false,
+            },
         });
     }
 
     function handleRemoveContact(index: number) {
         form.contacts.splice(index, 1);
+    }
+
+    function isPhone(value: string) {
+        const phoneRegex = /^(\+\d{1,3}\s?)?(\(?\d{2}\)?\s?)?\d{5}-?\d{4}$/;
+
+        return phoneRegex.test(value);
+    }
+
+    function updateContact(contact: ContactModelType) {
+        contact.type = isPhone(contact.value) ? 'phone' : 'email';
+
+        if (contact.type !== 'phone' && contact.properties?.whatsapp !== undefined) {
+            delete contact.properties.whatsapp;
+        } else {
+            contact['properties'] = {
+                whatsapp: false,
+            };
+        }
+
+        if (Object.keys(contact.properties).length === 0) {
+            delete contact.properties;
+        }
     }
 </script>
 
@@ -211,6 +238,7 @@
                             placeholder="Telefone ou E-mail"
                             type="text"
                             :name="`contact_value[${index}]`"
+                            @keyup="updateContact(contact)"
                         />
                     </label>
 
@@ -220,9 +248,22 @@
                     >
                         <input
                             v-model="contact.description"
-                            placeholder="Detalhes do contato"
+                            placeholder="Descrição do contato"
                             type="text"
                             :name="`contact_description[${index}]`"
+                        />
+                    </label>
+
+                    <label
+                        v-if="isPhone(contact.value)"
+                        class="form-control inline"
+                        style="max-width: fit-content; align-items: center"
+                    >
+                        Tem Whatsapp
+                        <input
+                            v-model="contact.properties.whatsapp"
+                            type="checkbox"
+                            :name="`contact_properties_whatsapp[${index}]`"
                         />
                     </label>
 
@@ -363,7 +404,7 @@
                     :disabled="isLoading"
                     @click="handleRemoveAddress(index)"
                 >
-                    Remover
+                    Remover endereço
                 </button>
             </fieldset>
 
