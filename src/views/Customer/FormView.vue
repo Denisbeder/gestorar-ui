@@ -95,14 +95,14 @@
         form.contacts.splice(index, 1);
     }
 
-    function isPhone(value: string) {
-        const phoneRegex = /^(\+\d{1,3}\s?)?(\(?\d{2}\)?\s?)?\d{5}-?\d{4}$/;
-
-        return phoneRegex.test(value);
-    }
-
     function updateContact(contact: ContactModelType) {
-        contact.type = isPhone(contact.value) ? 'phone' : 'email';
+        const isPhone = /^(\+\d{1,3}\s?)?(\(?\d{2}\)?\s?)?\d{5}-?\d{4}$/.test(contact.value);
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.value);
+
+        contact.type =
+            isPhone ? 'phone'
+            : isEmail ? 'email'
+            : 'text';
 
         if (contact.type !== 'phone') {
             if (Object.hasOwn(contact.properties ?? {}, 'whatsapp')) {
