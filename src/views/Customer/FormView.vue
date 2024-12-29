@@ -101,17 +101,19 @@
     function updateContact(contact: ContactModelType) {
         contact.type = isPhone(contact.value) ? 'phone' : 'email';
 
-        if (contact.type !== 'phone' && contact.properties?.whatsapp !== undefined) {
-            delete contact.properties.whatsapp;
-        } else {
-            contact['properties'] = {
-                whatsapp: false,
-            };
+        if (contact.type !== 'phone') {
+            if (Object.hasOwn(contact.properties ?? {}, 'whatsapp')) {
+                delete contact.properties.whatsapp;
+            }
+
+            if (Object.keys(contact.properties ?? {}).length === 0) {
+                delete contact.properties;
+            }
+
+            return;
         }
 
-        if (Object.keys(contact.properties).length === 0) {
-            delete contact.properties;
-        }
+        contact['properties'] = { whatsapp: false };
     }
 
     function loadCustomer() {
