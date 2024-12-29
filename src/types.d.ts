@@ -32,6 +32,8 @@ type AddressModelType<T = AddressTypeType> = {
     city?: string;
     state?: string;
     complement?: string;
+    created_at?: string;
+    updated_at?: string;
 };
 
 type ContactModelType = {
@@ -39,12 +41,16 @@ type ContactModelType = {
     value: string;
     description?: string;
     properties?: object;
+    created_at?: string;
+    updated_at?: string;
 };
 
-type PersonModelType = {
+type PeopleModelType = {
     first_name: string;
     last_name?: string | null;
     cpf?: number | null;
+    created_at?: string;
+    updated_at?: string;
     contacts: ContactModelType[];
     addresses: AddressModelType[];
 };
@@ -53,11 +59,23 @@ type CompanyModelType = {
     name: string;
     legal_name?: string | null;
     cnpj?: number | null;
+    created_at?: string;
+    updated_at?: string;
     contacts: ContactModelType[];
     addresses: AddressModelType[];
 };
 
+type CustomerModelType = {
+    id: number;
+    customerable_type: string;
+    customerable_id: number;
+    type: CustomerTypeType;
+    created_at: string;
+    updated_at: string;
+    customerable: PeopleModelType | CompanyModelType;
+};
+
 type CustomerFormType = {
     type: CustomerTypeType;
-} & PersonModelType &
+} & PeopleModelType &
     CompanyModelType;

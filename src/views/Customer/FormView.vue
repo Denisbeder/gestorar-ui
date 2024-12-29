@@ -1,8 +1,9 @@
 <script setup lang="ts">
-    import { reactive, ref, watch } from 'vue';
+    import { onMounted, reactive, ref } from 'vue';
     import { toast } from 'vue3-toastify';
     import { useHTTP } from '@/composable/useHTTP.ts';
     import { useCustomerService } from '@/composable/useCustomerService.ts';
+    import { useRoute, useRouter } from 'vue-router';
 
     const customerService = useCustomerService();
     const { displayError } = useHTTP();
@@ -13,7 +14,11 @@
         billing: 'Cobrança',
     };
 
+    const route = useRoute();
+    const router = useRouter();
+
     const isLoading = ref<boolean>(false);
+    const editMode = ref<boolean>(false);
     const form = reactive<CustomerFormType>({
         type: 'cpf',
         first_name: '',
@@ -22,34 +27,8 @@
         cnpj: null,
         name: '',
         legal_name: '',
-        addresses: [
-            {
-                type: 'commercial',
-                zipcode: null,
-                street: '',
-                number: '',
-                neighborhood: '',
-                city: '',
-                state: '',
-                complement: '',
-            },
-        ],
-        contacts: [
-            {
-                value: '67996948065',
-                type: 'phone',
-                properties: {
-                    whatsapp: false,
-                },
-            },
-            {
-                value: 'gK7Y4@example.com',
-                type: 'email',
-                properties: {
-                    whatsapp: false,
-                },
-            },
-        ],
+        addresses: [],
+        contacts: [],
     });
 
     function onSubmit() {
@@ -57,8 +36,26 @@
 
         toast.clearAll();
 
-        customerService
-            .store(form)
+        const promise = new Promise((resolve, reject) => {
+            if (editMode.value) {
+                customerService
+                    .update(route.params.id as number, form)
+                    .then((response) => resolve(response))
+                    .catch((error) => reject(error));
+
+                return;
+            }
+
+            customerService
+                .store(form)
+                .then(async (response) => {
+                    await router.push({ name: 'CustomersEdit', params: { id: response.data.id } });
+                    resolve(response);
+                })
+                .catch((error) => reject(error));
+        });
+
+        promise
             .then(() => toast.success('Cliente salvo'))
             .catch((error) => displayError(error))
             .finally(() => (isLoading.value = false));
@@ -116,11 +113,44 @@
             delete contact.properties;
         }
     }
+
+    function loadCustomer() {
+        if (!route.params.id) {
+            return;
+        }
+
+        isLoading.value = true;
+
+        customerService
+            .find(route.params.id as number)
+            .then(({ data }: CustomerModelType) => {
+                form.type = data.type;
+                form.first_name = data.customerable.first_name;
+                form.last_name = data.customerable.last_name;
+                form.cpf = data.customerable.cpf;
+                form.cnpj = data.customerable.cnpj;
+                form.name = data.customerable.name;
+                form.legal_name = data.customerable.legal_name;
+                form.addresses = data.customerable.addresses;
+                form.contacts = data.customerable.contacts;
+
+                editMode.value = true;
+            })
+            .catch((error) => displayError(error))
+            .finally(() => (isLoading.value = false));
+    }
+
+    onMounted(() => {
+        loadCustomer();
+    });
 </script>
 
 <template>
     <form @submit.prevent="onSubmit">
-        <fieldset :disabled="isLoading">
+        <fieldset
+            v-if="!editMode"
+            :disabled="isLoading"
+        >
             <legend>Tipo de cadastro</legend>
 
             <div class="form-control inline">

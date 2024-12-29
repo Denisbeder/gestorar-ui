@@ -31,7 +31,13 @@ const router: Router = createRouter({
         {
             path: '/customers/create',
             name: 'CustomersCreate',
-            component: () => import('../views/Customer/FormView.vue'),
+            component: () => import('../views/Customer/FormView.vue', { name: 'create' }),
+            meta: { requiresAuth: true },
+        },
+        {
+            path: '/customers/edit/:id',
+            name: 'CustomersEdit',
+            component: () => import('../views/Customer/FormView.vue', { name: 'edit' }),
             meta: { requiresAuth: true },
         },
         {
