@@ -84,10 +84,7 @@
     function handleAddContact() {
         form.contacts.push({
             value: '',
-            type: 'phone',
-            properties: {
-                whatsapp: false,
-            },
+            type: 'text',
         });
     }
 
