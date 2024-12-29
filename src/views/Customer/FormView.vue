@@ -136,15 +136,12 @@
             return;
         }
 
+        editMode.value = true;
         isLoading.value = true;
 
         customerService
             .find(route.params.id as number)
-            .then(({ data }: CustomerModelType) => {
-                setForm(data);
-
-                editMode.value = true;
-            })
+            .then(({ data }: CustomerModelType) => setForm(data))
             .catch((error) => displayError(error))
             .finally(() => (isLoading.value = false));
     }
