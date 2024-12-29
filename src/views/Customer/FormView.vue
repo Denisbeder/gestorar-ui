@@ -40,7 +40,10 @@
             if (editMode.value) {
                 customerService
                     .update(route.params.id as number, form)
-                    .then((response) => resolve(response))
+                    .then((response: CustomerModelType) => {
+                        setForm(response.data);
+                        resolve(response);
+                    })
                     .catch((error) => reject(error));
 
                 return;
@@ -116,6 +119,18 @@
         contact['properties'] = { whatsapp: false };
     }
 
+    function setForm(data: CustomerModelType) {
+        form.type = data.type;
+        form.first_name = data.customerable.first_name;
+        form.last_name = data.customerable.last_name;
+        form.cpf = data.customerable.cpf;
+        form.cnpj = data.customerable.cnpj;
+        form.name = data.customerable.name;
+        form.legal_name = data.customerable.legal_name;
+        form.addresses = data.customerable.addresses;
+        form.contacts = data.customerable.contacts;
+    }
+
     function loadCustomer() {
         if (!route.params.id) {
             return;
@@ -126,15 +141,7 @@
         customerService
             .find(route.params.id as number)
             .then(({ data }: CustomerModelType) => {
-                form.type = data.type;
-                form.first_name = data.customerable.first_name;
-                form.last_name = data.customerable.last_name;
-                form.cpf = data.customerable.cpf;
-                form.cnpj = data.customerable.cnpj;
-                form.name = data.customerable.name;
-                form.legal_name = data.customerable.legal_name;
-                form.addresses = data.customerable.addresses;
-                form.contacts = data.customerable.contacts;
+                setForm(data);
 
                 editMode.value = true;
             })
@@ -287,7 +294,7 @@
                     </label>
 
                     <label
-                        v-if="isPhone(contact.value)"
+                        v-if="contact?.properties?.whatsapp !== undefined"
                         class="form-control inline"
                         style="max-width: fit-content; align-items: center"
                     >
