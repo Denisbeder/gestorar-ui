@@ -17,16 +17,19 @@
 <template>
     <div
         v-if="$slots.default"
-        class="page-loading-container"
+        class="container"
+        :class="{ loading: loading }"
     >
         <div
             v-if="loading"
-            class="page-loading-wrapper"
+            class="loading-overlay"
         >
             <progress></progress>
         </div>
 
-        <slot />
+        <div class="content">
+            <slot />
+        </div>
     </div>
 
     <div
@@ -38,10 +41,14 @@
 </template>
 
 <style lang="scss" scoped>
-    .page-loading-container {
+    .container {
         position: relative;
 
-        .page-loading-wrapper {
+        .content {
+            width: 100%;
+        }
+
+        .loading-overlay {
             display: flex;
             width: 100%;
             height: 100%;
@@ -54,7 +61,12 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(255, 255, 255, 0.8);
+        }
+
+        &.loading {
+            .content {
+                opacity: 0.2;
+            }
         }
     }
 </style>
