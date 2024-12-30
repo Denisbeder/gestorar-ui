@@ -13,37 +13,50 @@
     const customers = ref<CustomerModelType[]>([]);
     const paginationLinks = ref([]);
 
-    function loadCustomers() {
+    function loadCustomers(params?: Record<string, string | number>) {
         isLoading.value = true;
-
-        const params = { ...route.query };
 
         customerService
             .index(params)
             .then(({ data }: AxiosResponse<PaginationType<CustomerModelType>>) => {
                 paginationLinks.value = data.links.map((link) => {
                     let url = link.url;
+                    let page = 1;
 
                     if (url) {
                         const urlInstance = new URL(url);
                         url = urlInstance.pathname + urlInstance.search;
+                        page = urlInstance.searchParams.get('page');
                     }
 
                     return {
                         label: link.label,
                         url: url,
+                        page: page,
                         active: link.active,
                     };
                 });
 
                 customers.value = data.data;
+
+                const paramsInstance = new URLSearchParams(params);
+
+                if (paramsInstance.size > 0) {
+                    window.history.pushState({}, '', `?${paramsInstance.toString()}`);
+                }
             })
             .catch((error) => displayError(error))
             .finally(() => (isLoading.value = false));
     }
 
+    function goToPage(page: number) {
+        loadCustomers({ page });
+    }
+
     onMounted(() => {
-        loadCustomers();
+        const params = { ...route.query };
+
+        loadCustomers(params);
     });
 </script>
 
@@ -68,7 +81,8 @@
         <button
             v-for="link in paginationLinks"
             :key="link.label"
-            @click="$router.push(link.url)"
+            :style="{ backgroundColor: link.active ? '#ff0000' : 'unset' }"
+            @click="goToPage(link.page)"
         >
             <span v-html="link.label"></span>
         </button>
