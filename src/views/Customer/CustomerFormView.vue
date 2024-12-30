@@ -4,9 +4,7 @@
     import { useHTTP } from '@/composable/useHTTP.ts';
     import { useCustomerService } from '@/composable/useCustomerService.ts';
     import { useRoute, useRouter } from 'vue-router';
-
-    const customerService = useCustomerService();
-    const { displayError } = useHTTP();
+    import type { AxiosResponse } from 'axios';
 
     const ADDRESS_TAG_ENUM = {
         home: 'Casa',
@@ -16,6 +14,8 @@
 
     const route = useRoute();
     const router = useRouter();
+    const customerService = useCustomerService();
+    const { displayError } = useHTTP();
 
     const isLoading = ref<boolean>(false);
     const editMode = ref<boolean>(false);
@@ -39,8 +39,8 @@
         const promise = new Promise((resolve, reject) => {
             if (editMode.value) {
                 customerService
-                    .update(route.params.id as number, form)
-                    .then((response: CustomerModelType) => {
+                    .update(Number(route.params.id), form)
+                    .then((response: AxiosResponse<CustomerModelType>) => {
                         setForm(response.data);
                         resolve(response);
                     })
@@ -137,8 +137,8 @@
         isLoading.value = true;
 
         customerService
-            .find(route.params.id as number)
-            .then(({ data }: CustomerModelType) => setForm(data))
+            .find(Number(route.params.id))
+            .then(({ data }: AxiosResponse<CustomerModelType>) => setForm(data))
             .catch((error) => displayError(error))
             .finally(() => (isLoading.value = false));
     }

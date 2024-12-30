@@ -29,15 +29,21 @@ const router: Router = createRouter({
             meta: { requiresAuth: true },
         },
         {
-            path: '/customers/create',
-            name: 'CustomersCreate',
-            component: () => import('../views/Customer/FormView.vue', { name: 'create' }),
+            path: '/customers',
+            name: 'CustomersIndex',
+            component: () => import('../views/Customer/CustomerIndexView.vue'),
             meta: { requiresAuth: true },
         },
         {
-            path: '/customers/edit/:id',
+            path: '/customers/create',
+            name: 'CustomersCreate',
+            component: () => import('../views/Customer/CustomerFormView.vue'),
+            meta: { requiresAuth: true },
+        },
+        {
+            path: '/customers/:id/edit',
             name: 'CustomersEdit',
-            component: () => import('../views/Customer/FormView.vue', { name: 'edit' }),
+            component: () => import('../views/Customer/CustomerFormView.vue'),
             meta: { requiresAuth: true },
         },
         {

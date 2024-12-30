@@ -10,13 +10,28 @@ type CredentialsType = {
     password: string;
 };
 
-type UserType = {
+type UserModelType = {
     id: number;
     name: string;
     email: string;
     email_verified_at: string;
     created_at: string;
     updated_at: string;
+};
+
+type PaginationType<T> = {
+    current_page: number;
+    data: T[];
+    first_page_url: string;
+    from: number;
+    last_page: number;
+    last_page_url: string;
+    next_page_url: string;
+    path: string;
+    per_page: number;
+    prev_page_url: string;
+    to: number;
+    total: number;
 };
 
 type AddressTypeType = 'home' | 'commercial' | 'billing';
@@ -67,12 +82,13 @@ type CompanyModelType = {
 
 type CustomerModelType = {
     id: number;
+    name?: string;
     customerable_type: string;
     customerable_id: number;
     type: CustomerTypeType;
     created_at: string;
     updated_at: string;
-    customerable: PeopleModelType | CompanyModelType;
+    customerable: PeopleModelType & CompanyModelType;
 };
 
 type CustomerFormType = {

@@ -18,7 +18,7 @@
             <RouterLink to="/dashboard">Dashboard</RouterLink>
             <RouterLink to="/login">Entrar</RouterLink>
             <template v-if="isAuthenticated">
-                <RouterLink to="/customers/create">Cadastrar Cliente</RouterLink>
+                <RouterLink to="/customers">Clientes</RouterLink>
                 <button @click="handleLogout">Sair</button>
             </template>
         </nav>
