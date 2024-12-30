@@ -11,6 +11,7 @@
 
     const isLoading = ref<boolean>(false);
     const customers = ref<CustomerModelType[]>([]);
+    const paginationLinks = ref([]);
 
     function loadCustomers() {
         isLoading.value = true;
@@ -19,7 +20,24 @@
 
         customerService
             .index(params)
-            .then(({ data }: AxiosResponse<PaginationType<CustomerModelType>>) => (customers.value = data.data))
+            .then(({ data }: AxiosResponse<PaginationType<CustomerModelType>>) => {
+                paginationLinks.value = data.links.map((link) => {
+                    let url = link.url;
+
+                    if (url) {
+                        const urlInstance = new URL(url);
+                        url = urlInstance.pathname + urlInstance.search;
+                    }
+
+                    return {
+                        label: link.label,
+                        url: url,
+                        active: link.active,
+                    };
+                });
+
+                customers.value = data.data;
+            })
             .catch((error) => displayError(error))
             .finally(() => (isLoading.value = false));
     }
@@ -45,6 +63,16 @@
             </div>
         </li>
     </ul>
+
+    <div class="paginantion">
+        <button
+            v-for="link in paginationLinks"
+            :key="link.label"
+            @click="$router.push(link.url)"
+        >
+            <span v-html="link.label"></span>
+        </button>
+    </div>
 </template>
 
 <style lang="scss" scoped>
@@ -65,5 +93,9 @@
                 margin-left: auto;
             }
         }
+    }
+
+    .paginantion {
+        margin-top: 1rem;
     }
 </style>
