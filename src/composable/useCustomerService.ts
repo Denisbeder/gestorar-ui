@@ -2,7 +2,7 @@ import { useHTTP } from '@/composable/useHTTP.ts';
 import type { AxiosResponse } from 'axios';
 
 export function useCustomerService() {
-    const { http } = useHTTP();
+    const http = useHTTP();
 
     function store(payload: CustomerFormType): Promise<AxiosResponse<CustomerModelType>> {
         return http.post('/api/customers', payload);

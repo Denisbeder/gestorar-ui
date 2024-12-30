@@ -1,13 +1,14 @@
 import { computed, reactive } from 'vue';
 import { useHTTP } from '@/composable/useHTTP.ts';
 import type { AxiosError } from 'axios';
+import { displayError } from '@/utils.ts';
 
 const state = reactive({
     user: null,
 });
 
 export function useAuthService() {
-    const { http, displayError } = useHTTP();
+    const http = useHTTP();
 
     const user = computed(() => state.user);
     const isAuthenticated = computed(() => state.user !== null);

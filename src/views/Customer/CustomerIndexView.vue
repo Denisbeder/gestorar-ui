@@ -1,13 +1,12 @@
 <script setup lang="ts">
     import { onMounted, ref } from 'vue';
     import { useCustomerService } from '@/composable/useCustomerService.ts';
-    import { useHTTP } from '@/composable/useHTTP.ts';
     import type { AxiosResponse } from 'axios';
     import { useRoute } from 'vue-router';
+    import { displayError } from '@/utils.ts';
 
     const route = useRoute();
     const customerService = useCustomerService();
-    const { displayError } = useHTTP();
 
     const isLoading = ref<boolean>(false);
     const customers = ref<CustomerModelType[]>([]);

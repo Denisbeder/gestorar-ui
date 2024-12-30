@@ -1,46 +1,24 @@
-import axios, { type AxiosError, type AxiosInstance } from 'axios';
-import { toast, type ToastOptions, type ToastType } from 'vue3-toastify';
-
-const http: AxiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080',
-    headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        Accept: 'application/json',
-    },
-});
-
-http.defaults.withCredentials = true;
-http.defaults.withXSRFToken = true;
-
-http.interceptors.request.use(async (config) => {
-    if ((config.method as string).toLowerCase() !== 'get') {
-        await http.get('sanctum/csrf-cookie');
-    }
-
-    return config;
-});
+import axios from 'axios';
 
 export function useHTTP() {
-    function displayError(
-        payload: string | AxiosError<AxiosErrorDataType>,
-        options: ToastType | ToastOptions = 'error',
-    ) {
-        const toastConfig: ToastOptions = typeof options === 'string' ? { type: options } : options;
+    const http: AxiosInstance = axios.create({
+        baseURL: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            Accept: 'application/json',
+        },
+    });
 
-        if (typeof payload === 'string') {
-            toast(payload, toastConfig as ToastOptions);
-            return;
+    http.defaults.withCredentials = true;
+    http.defaults.withXSRFToken = true;
+
+    http.interceptors.request.use(async (config) => {
+        if ((config.method as string).toLowerCase() !== 'get') {
+            await http.get('sanctum/csrf-cookie');
         }
 
-        const payloadData = payload.response?.data;
-        let msg = payloadData?.message ?? payload.message;
+        return config;
+    });
 
-        if (payloadData?.errors) {
-            msg = Object.values(payloadData.errors).flat().join('\n');
-        }
-
-        toast(msg, toastConfig as ToastOptions);
-    }
-
-    return { http, displayError };
+    return http;
 }

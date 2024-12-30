@@ -1,10 +1,10 @@
 <script setup lang="ts">
     import { onMounted, reactive, ref } from 'vue';
     import { toast } from 'vue3-toastify';
-    import { useHTTP } from '@/composable/useHTTP.ts';
     import { useCustomerService } from '@/composable/useCustomerService.ts';
     import { useRoute, useRouter } from 'vue-router';
     import type { AxiosResponse } from 'axios';
+    import { displayError } from '@/utils.ts';
 
     const ADDRESS_TAG_ENUM = {
         home: 'Casa',
@@ -15,7 +15,6 @@
     const route = useRoute();
     const router = useRouter();
     const customerService = useCustomerService();
-    const { displayError } = useHTTP();
 
     const isLoading = ref<boolean>(false);
     const editMode = ref<boolean>(false);
