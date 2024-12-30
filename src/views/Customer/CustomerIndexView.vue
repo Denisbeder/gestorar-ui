@@ -3,7 +3,9 @@
     import { useCustomerService } from '@/composable/useCustomerService.ts';
     import { useHTTP } from '@/composable/useHTTP.ts';
     import type { AxiosResponse } from 'axios';
+    import { useRoute } from 'vue-router';
 
+    const route = useRoute();
     const customerService = useCustomerService();
     const { displayError } = useHTTP();
 
@@ -13,12 +15,11 @@
     function loadCustomers() {
         isLoading.value = true;
 
+        const params = { ...route.query };
+
         customerService
-            .index()
-            .then(({ data }: AxiosResponse<PaginationType<CustomerModelType>>) => {
-                console.log(data);
-                customers.value = data.data;
-            })
+            .index(params)
+            .then(({ data }: AxiosResponse<PaginationType<CustomerModelType>>) => (customers.value = data.data))
             .catch((error) => displayError(error))
             .finally(() => (isLoading.value = false));
     }
