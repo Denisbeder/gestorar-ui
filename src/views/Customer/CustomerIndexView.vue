@@ -4,51 +4,31 @@
     import type { AxiosResponse } from 'axios';
     import { useRoute } from 'vue-router';
     import { displayError } from '@/utils.ts';
+    import PaginationComponent from '@/components/PaginationComponent.vue';
+    import LoadingComponent from '@/components/LoadingComponent.vue';
 
     const route = useRoute();
     const customerService = useCustomerService();
 
-    const isLoading = ref<boolean>(false);
+    const loading = ref<boolean>(false);
     const customers = ref<CustomerModelType[]>([]);
     const paginationLinks = ref([]);
 
     function loadCustomers(params?: Record<string, string | number>) {
-        isLoading.value = true;
+        loading.value = true;
 
         customerService
             .index(params)
             .then(({ data }: AxiosResponse<PaginationType<CustomerModelType>>) => {
-                paginationLinks.value = data.links.map((link) => {
-                    let url = link.url;
-                    let page = 1;
-
-                    if (url) {
-                        const urlInstance = new URL(url);
-                        url = urlInstance.pathname + urlInstance.search;
-                        page = urlInstance.searchParams.get('page');
-                    }
-
-                    return {
-                        label: link.label,
-                        url: url,
-                        page: page,
-                        active: link.active,
-                    };
-                });
+                paginationLinks.value = data.links;
 
                 customers.value = data.data;
-
-                const paramsInstance = new URLSearchParams(params);
-
-                if (paramsInstance.size > 0) {
-                    window.history.pushState({}, '', `?${paramsInstance.toString()}`);
-                }
             })
             .catch((error) => displayError(error))
-            .finally(() => (isLoading.value = false));
+            .finally(() => (loading.value = false));
     }
 
-    function goToPage(page: number) {
+    function onPageChange(page: number) {
         loadCustomers({ page });
     }
 
@@ -61,31 +41,28 @@
 
 <template>
     <button @click="$router.push('/customers/create')">Cadastrar</button>
-    <ul class="list-wrapper">
-        <li
-            v-for="customer in customers"
-            :key="customer.id"
-        >
-            <div class="list-item">
-                <div>{{ customer.name }}</div>
-                <div class="actions">
-                    <button @click="$router.push(`/customers/${customer.id}/edit`)">Editar</button>
-                    <button>Delete</button>
-                </div>
-            </div>
-        </li>
-    </ul>
 
-    <div class="paginantion">
-        <button
-            v-for="link in paginationLinks"
-            :key="link.label"
-            :style="{ backgroundColor: link.active ? '#ff0000' : 'unset' }"
-            @click="goToPage(link.page)"
-        >
-            <span v-html="link.label"></span>
-        </button>
-    </div>
+    <LoadingComponent :loading="loading">
+        <ul class="list-wrapper">
+            <li
+                v-for="customer in customers"
+                :key="customer.id"
+            >
+                <div class="list-item">
+                    <div>{{ customer.name }}</div>
+                    <div class="actions">
+                        <button @click="$router.push(`/customers/${customer.id}/edit`)">Editar</button>
+                        <button>Delete</button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <PaginationComponent
+            :links="paginationLinks"
+            @on-change="onPageChange"
+        />
+    </LoadingComponent>
 </template>
 
 <style lang="scss" scoped>
@@ -106,9 +83,5 @@
                 margin-left: auto;
             }
         }
-    }
-
-    .paginantion {
-        margin-top: 1rem;
     }
 </style>

@@ -5,6 +5,7 @@
     import { useRoute, useRouter } from 'vue-router';
     import type { AxiosResponse } from 'axios';
     import { displayError } from '@/utils.ts';
+    import LoadingComponent from '@/components/LoadingComponent.vue';
 
     const ADDRESS_TAG_ENUM = {
         home: 'Casa',
@@ -16,7 +17,7 @@
     const router = useRouter();
     const customerService = useCustomerService();
 
-    const isLoading = ref<boolean>(false);
+    const loading = ref<boolean>(false);
     const editMode = ref<boolean>(false);
     const form = reactive<CustomerFormType>({
         type: 'cpf',
@@ -31,7 +32,7 @@
     });
 
     function onSubmit() {
-        isLoading.value = true;
+        loading.value = true;
 
         toast.clearAll();
 
@@ -60,7 +61,7 @@
         promise
             .then(() => toast.success('Cliente salvo'))
             .catch((error) => displayError(error))
-            .finally(() => (isLoading.value = false));
+            .finally(() => (loading.value = false));
     }
 
     function handleAddAddress() {
@@ -133,13 +134,13 @@
         }
 
         editMode.value = true;
-        isLoading.value = true;
+        loading.value = true;
 
         customerService
             .find(Number(route.params.id))
             .then(({ data }: AxiosResponse<CustomerModelType>) => setForm(data))
             .catch((error) => displayError(error))
-            .finally(() => (isLoading.value = false));
+            .finally(() => (loading.value = false));
     }
 
     onMounted(() => {
@@ -148,313 +149,315 @@
 </script>
 
 <template>
-    <form @submit.prevent="onSubmit">
-        <fieldset
-            v-if="!editMode"
-            :disabled="isLoading"
-        >
-            <legend>Tipo de cadastro</legend>
-
-            <div class="form-control inline">
-                <label class="form-control">
-                    CPF
-                    <input
-                        v-model="form.type"
-                        type="radio"
-                        name="type"
-                        value="cpf"
-                    />
-                </label>
-
-                <label class="form-control">
-                    CNPJ
-                    <input
-                        v-model="form.type"
-                        type="radio"
-                        name="type"
-                        value="cnpj"
-                    />
-                </label>
-            </div>
-        </fieldset>
-
-        <fieldset
-            v-if="form.type === 'cpf'"
-            :disabled="isLoading"
-        >
-            <legend>Dados da pessoa</legend>
-
-            <div class="form-control inline">
-                <label class="form-control">
-                    Primeiro nome
-                    <input
-                        v-model="form.first_name"
-                        type="text"
-                        name="first_name"
-                    />
-                </label>
-
-                <label class="form-control">
-                    Sobrenome
-                    <input
-                        v-model="form.last_name"
-                        type="text"
-                        name="last_name"
-                    />
-                </label>
-
-                <label class="form-control">
-                    CPF
-                    <input
-                        v-model="form.cpf"
-                        type="text"
-                        name="cpf"
-                    />
-                </label>
-            </div>
-        </fieldset>
-
-        <fieldset
-            v-if="form.type === 'cnpj'"
-            :disabled="isLoading"
-        >
-            <legend>Dados da empresa</legend>
-
-            <label class="form-control">
-                Nome
-                <input
-                    v-model="form.name"
-                    type="text"
-                    name="name"
-                />
-            </label>
-
-            <div class="form-control inline">
-                <label
-                    class="form-control"
-                    style="max-width: 30%"
-                >
-                    CNPJ
-                    <input
-                        v-model="form.cnpj"
-                        type="text"
-                        name="cnpj"
-                    />
-                </label>
-
-                <label class="form-control">
-                    Razão Social
-                    <input
-                        v-model="form.legal_name"
-                        type="text"
-                        name="legal_name"
-                    />
-                </label>
-            </div>
-        </fieldset>
-
-        <fieldset :disabled="isLoading">
-            <legend>Contatos</legend>
-
-            <template
-                v-for="(contact, index) in form.contacts"
-                :key="`contact_${index}`"
+    <LoadingComponent :loading="loading">
+        <form @submit.prevent="onSubmit">
+            <fieldset
+                v-if="!editMode"
+                :disabled="loading"
             >
+                <legend>Tipo de cadastro</legend>
+
                 <div class="form-control inline">
-                    <label
-                        class="form-control"
-                        style="max-width: 20%"
-                    >
+                    <label class="form-control">
+                        CPF
                         <input
-                            v-model="contact.value"
-                            placeholder="Telefone ou E-mail"
-                            type="text"
-                            :name="`contact_value[${index}]`"
-                            @keyup="updateContact(contact)"
+                            v-model="form.type"
+                            type="radio"
+                            name="type"
+                            value="cpf"
                         />
                     </label>
 
-                    <label
-                        class="form-control"
-                        style="max-width: 20%"
-                    >
+                    <label class="form-control">
+                        CNPJ
                         <input
-                            v-model="contact.description"
-                            placeholder="Descrição do contato"
-                            type="text"
-                            :name="`contact_description[${index}]`"
+                            v-model="form.type"
+                            type="radio"
+                            name="type"
+                            value="cnpj"
                         />
                     </label>
-
-                    <label
-                        v-if="contact?.properties?.whatsapp !== undefined"
-                        class="form-control inline"
-                        style="max-width: fit-content; align-items: center"
-                    >
-                        Tem Whatsapp
-                        <input
-                            v-model="contact.properties.whatsapp"
-                            type="checkbox"
-                            :name="`contact_properties_whatsapp[${index}]`"
-                        />
-                    </label>
-
-                    <button
-                        style="max-width: 80px"
-                        type="button"
-                        @click="handleRemoveContact(index)"
-                    >
-                        Remover
-                    </button>
                 </div>
-            </template>
-
-            <button
-                type="button"
-                @click="handleAddContact"
-            >
-                + ADD CONTATO
-            </button>
-        </fieldset>
-
-        <fieldset :disabled="isLoading">
-            <legend>Endereços</legend>
+            </fieldset>
 
             <fieldset
-                v-for="(address, index) in form.addresses"
-                :key="`address-${index}`"
+                v-if="form.type === 'cpf'"
+                :disabled="loading"
             >
-                <legend>{{ ADDRESS_TAG_ENUM[address?.type ?? 'home'] }}</legend>
+                <legend>Dados da pessoa</legend>
 
                 <div class="form-control inline">
                     <label class="form-control">
-                        Casa
+                        Primeiro nome
                         <input
-                            v-model="address.type"
-                            type="radio"
-                            :name="`type[${index}]`"
-                            value="home"
+                            v-model="form.first_name"
+                            type="text"
+                            name="first_name"
                         />
                     </label>
 
                     <label class="form-control">
-                        Comercial
+                        Sobrenome
                         <input
-                            v-model="address.type"
-                            type="radio"
-                            :name="`type[${index}]`"
-                            value="commercial"
+                            v-model="form.last_name"
+                            type="text"
+                            name="last_name"
                         />
                     </label>
 
                     <label class="form-control">
-                        Cobrança
+                        CPF
                         <input
-                            v-model="address.type"
-                            type="radio"
-                            :name="`type[${index}]`"
-                            value="billing"
+                            v-model="form.cpf"
+                            type="text"
+                            name="cpf"
                         />
                     </label>
                 </div>
+            </fieldset>
+
+            <fieldset
+                v-if="form.type === 'cnpj'"
+                :disabled="loading"
+            >
+                <legend>Dados da empresa</legend>
+
+                <label class="form-control">
+                    Nome
+                    <input
+                        v-model="form.name"
+                        type="text"
+                        name="name"
+                    />
+                </label>
 
                 <div class="form-control inline">
                     <label
                         class="form-control"
-                        style="max-width: 20%"
+                        style="max-width: 30%"
                     >
-                        CEP
+                        CNPJ
                         <input
-                            v-model="address.zipcode"
+                            v-model="form.cnpj"
                             type="text"
-                            :name="`zipcode[${index}]`"
+                            name="cnpj"
                         />
                     </label>
 
                     <label class="form-control">
-                        Rua
+                        Razão Social
                         <input
-                            v-model="address.street"
+                            v-model="form.legal_name"
                             type="text"
-                            :name="`street[${index}]`"
-                        />
-                    </label>
-
-                    <label
-                        class="form-control"
-                        style="max-width: 20%"
-                    >
-                        Número
-                        <input
-                            v-model="address.number"
-                            type="text"
-                            :name="`number[${index}]`"
+                            name="legal_name"
                         />
                     </label>
                 </div>
+            </fieldset>
 
-                <div class="form-control inline">
-                    <label class="form-control">
-                        Bairro
-                        <input
-                            v-model="address.neighborhood"
-                            type="text"
-                            :name="`neighborhood[${index}]`"
-                        />
-                    </label>
+            <fieldset :disabled="loading">
+                <legend>Contatos</legend>
+
+                <template
+                    v-for="(contact, index) in form.contacts"
+                    :key="`contact_${index}`"
+                >
+                    <div class="form-control inline">
+                        <label
+                            class="form-control"
+                            style="max-width: 20%"
+                        >
+                            <input
+                                v-model="contact.value"
+                                placeholder="Telefone ou E-mail"
+                                type="text"
+                                :name="`contact_value[${index}]`"
+                                @keyup="updateContact(contact)"
+                            />
+                        </label>
+
+                        <label
+                            class="form-control"
+                            style="max-width: 20%"
+                        >
+                            <input
+                                v-model="contact.description"
+                                placeholder="Descrição do contato"
+                                type="text"
+                                :name="`contact_description[${index}]`"
+                            />
+                        </label>
+
+                        <label
+                            v-if="contact?.properties?.whatsapp !== undefined"
+                            class="form-control inline"
+                            style="max-width: fit-content; align-items: center"
+                        >
+                            Tem Whatsapp
+                            <input
+                                v-model="contact.properties.whatsapp"
+                                type="checkbox"
+                                :name="`contact_properties_whatsapp[${index}]`"
+                            />
+                        </label>
+
+                        <button
+                            style="max-width: 80px"
+                            type="button"
+                            @click="handleRemoveContact(index)"
+                        >
+                            Remover
+                        </button>
+                    </div>
+                </template>
+
+                <button
+                    type="button"
+                    @click="handleAddContact"
+                >
+                    + ADD CONTATO
+                </button>
+            </fieldset>
+
+            <fieldset :disabled="loading">
+                <legend>Endereços</legend>
+
+                <fieldset
+                    v-for="(address, index) in form.addresses"
+                    :key="`address-${index}`"
+                >
+                    <legend>{{ ADDRESS_TAG_ENUM[address?.type ?? 'home'] }}</legend>
+
+                    <div class="form-control inline">
+                        <label class="form-control">
+                            Casa
+                            <input
+                                v-model="address.type"
+                                type="radio"
+                                :name="`type[${index}]`"
+                                value="home"
+                            />
+                        </label>
+
+                        <label class="form-control">
+                            Comercial
+                            <input
+                                v-model="address.type"
+                                type="radio"
+                                :name="`type[${index}]`"
+                                value="commercial"
+                            />
+                        </label>
+
+                        <label class="form-control">
+                            Cobrança
+                            <input
+                                v-model="address.type"
+                                type="radio"
+                                :name="`type[${index}]`"
+                                value="billing"
+                            />
+                        </label>
+                    </div>
+
+                    <div class="form-control inline">
+                        <label
+                            class="form-control"
+                            style="max-width: 20%"
+                        >
+                            CEP
+                            <input
+                                v-model="address.zipcode"
+                                type="text"
+                                :name="`zipcode[${index}]`"
+                            />
+                        </label>
+
+                        <label class="form-control">
+                            Rua
+                            <input
+                                v-model="address.street"
+                                type="text"
+                                :name="`street[${index}]`"
+                            />
+                        </label>
+
+                        <label
+                            class="form-control"
+                            style="max-width: 20%"
+                        >
+                            Número
+                            <input
+                                v-model="address.number"
+                                type="text"
+                                :name="`number[${index}]`"
+                            />
+                        </label>
+                    </div>
+
+                    <div class="form-control inline">
+                        <label class="form-control">
+                            Bairro
+                            <input
+                                v-model="address.neighborhood"
+                                type="text"
+                                :name="`neighborhood[${index}]`"
+                            />
+                        </label>
+
+                        <label class="form-control">
+                            Cidade
+                            <input
+                                v-model="address.city"
+                                type="text"
+                                :name="`city[${index}]`"
+                            />
+                        </label>
+
+                        <label class="form-control">
+                            Estado
+                            <input
+                                v-model="address.state"
+                                type="text"
+                                :name="`state[${index}]`"
+                            />
+                        </label>
+                    </div>
 
                     <label class="form-control">
-                        Cidade
+                        Complemento
                         <input
-                            v-model="address.city"
-                            type="text"
-                            :name="`city[${index}]`"
-                        />
-                    </label>
-
-                    <label class="form-control">
-                        Estado
-                        <input
-                            v-model="address.state"
+                            v-model="address.complement"
                             type="text"
                             :name="`state[${index}]`"
                         />
                     </label>
-                </div>
 
-                <label class="form-control">
-                    Complemento
-                    <input
-                        v-model="address.complement"
-                        type="text"
-                        :name="`state[${index}]`"
-                    />
-                </label>
+                    <button
+                        type="button"
+                        :disabled="loading"
+                        @click="handleRemoveAddress(index)"
+                    >
+                        Remover endereço
+                    </button>
+                </fieldset>
 
                 <button
                     type="button"
-                    :disabled="isLoading"
-                    @click="handleRemoveAddress(index)"
+                    @click="handleAddAddress"
                 >
-                    Remover endereço
+                    + ADD ENDEREÇO
                 </button>
             </fieldset>
 
             <button
-                type="button"
-                @click="handleAddAddress"
+                type="submit"
+                :disabled="loading"
             >
-                + ADD ENDEREÇO
+                Salvar
             </button>
-        </fieldset>
-
-        <button
-            type="submit"
-            :disabled="isLoading"
-        >
-            Salvar
-        </button>
-    </form>
+        </form>
+    </LoadingComponent>
 </template>
 
 <style lang="scss" scoped>

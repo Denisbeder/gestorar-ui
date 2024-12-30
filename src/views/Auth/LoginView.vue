@@ -7,18 +7,18 @@
     const router = useRouter();
     const route = useRoute();
 
-    const isLoading = ref<boolean>(false);
+    const loading = ref<boolean>(false);
     const form = reactive<CredentialsType>({ email: 'admin@email.com', password: 'password' });
 
     async function onSubmit() {
-        isLoading.value = true;
+        loading.value = true;
 
         try {
             await authService.login(form);
 
             await router.push((route.query?.redirect ?? '/dashboard') as string);
         } finally {
-            isLoading.value = false;
+            loading.value = false;
         }
     }
 </script>
@@ -28,21 +28,21 @@
         <form @submit.prevent="onSubmit">
             <input
                 v-model="form.email"
-                :disabled="isLoading"
+                :disabled="loading"
                 type="text"
                 name="email"
                 autocomplete="email"
             />
             <input
                 v-model="form.password"
-                :disabled="isLoading"
+                :disabled="loading"
                 type="password"
                 name="password"
                 autocomplete="current-password"
             />
 
             <button
-                :disabled="isLoading"
+                :disabled="loading"
                 type="submit"
             >
                 Enviar
