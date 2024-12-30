@@ -1,6 +1,6 @@
 <script setup lang="ts">
     type PropsType = {
-        links: Pick<PaginationType, 'links'>;
+        links: PaginationType['links'];
     };
 
     defineProps<PropsType>();

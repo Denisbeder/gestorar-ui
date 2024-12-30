@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
 export function useHTTP() {
     const http: AxiosInstance = axios.create({

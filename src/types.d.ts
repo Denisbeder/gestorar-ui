@@ -19,7 +19,7 @@ type UserModelType = {
     updated_at: string;
 };
 
-type PaginationType<T> = {
+type PaginationType<T = unknown> = {
     current_page: number;
     data: T[];
     first_page_url: string;

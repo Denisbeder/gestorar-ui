@@ -1,6 +1,4 @@
 <script setup lang="ts">
-    import { useSlots } from 'vue';
-
     type PropsType = {
         loading: boolean;
     };
@@ -8,10 +6,6 @@
     withDefaults(defineProps<PropsType>(), {
         loading: false,
     });
-
-    const slots = useSlots();
-
-    console.log(slots.default);
 </script>
 
 <template>

@@ -12,7 +12,7 @@
 
     const loading = ref<boolean>(false);
     const customers = ref<CustomerModelType[]>([]);
-    const paginationLinks = ref([]);
+    const paginationLinks = ref<PaginationType['links']>([]);
 
     function loadCustomers(params?: Record<string, string | number>) {
         loading.value = true;
@@ -33,7 +33,7 @@
     }
 
     onMounted(() => {
-        const params = { ...route.query };
+        const params = { ...(route.query as object) };
 
         loadCustomers(params);
     });
