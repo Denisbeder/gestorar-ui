@@ -20,8 +20,10 @@ export function useCustomerService() {
         return http.delete(`/api/customers/${id}`);
     }
 
-    function index(): Promise<AxiosResponse<PaginationType<CustomerModelType>>> {
-        return http.get('/api/customers');
+    function index(
+        params?: Record<string, string | number>,
+    ): Promise<AxiosResponse<PaginationType<CustomerModelType>>> {
+        return http.get('/api/customers', { params });
     }
 
     return { store, update, find, destroy, index };

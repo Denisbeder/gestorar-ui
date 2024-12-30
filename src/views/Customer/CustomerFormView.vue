@@ -103,7 +103,7 @@
 
         if (contact.type !== 'phone') {
             if (Object.hasOwn(contact.properties ?? {}, 'whatsapp')) {
-                delete contact.properties.whatsapp;
+                delete contact?.properties?.whatsapp;
             }
 
             if (Object.keys(contact.properties ?? {}).length === 0) {

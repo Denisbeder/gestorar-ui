@@ -55,7 +55,7 @@ type ContactModelType = {
     type?: ContactTypeType;
     value: string;
     description?: string;
-    properties?: object;
+    properties?: { whatsapp?: boolean };
     created_at?: string;
     updated_at?: string;
 };
