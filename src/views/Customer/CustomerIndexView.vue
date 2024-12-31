@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { onMounted, ref } from 'vue';
+    import { onBeforeUnmount, onMounted, ref } from 'vue';
     import { useCustomerService } from '@/composable/useCustomerService.ts';
     import type { AxiosResponse } from 'axios';
     import { useRoute } from 'vue-router';
@@ -11,10 +11,12 @@
     const customerService = useCustomerService();
 
     const loading = ref<boolean>(false);
+    const deleteLoading = ref<boolean>(false);
     const customers = ref<PaginationDataType<CustomerModelType> | null>(null);
+    const timeouts = ref<ReturnType<typeof setTimeout>[]>([]);
 
-    function loadCustomers(params?: Record<string, string | number>) {
-        loading.value = true;
+    function loadCustomers(params?: Record<string, string | number>, silent = false) {
+        loading.value = !silent;
 
         customerService
             .index(params)
@@ -30,24 +32,37 @@
             return;
         }
 
+        deleteLoading.value = true;
+
         customerService
             .destroy(id)
             .then(() => {
-                const params = { ...(route.query as object) };
+                customers.value!.data = customers.value!.data.filter((customer) => customer.id !== id);
 
-                loadCustomers(params);
+                timeouts.value.push(setTimeout(() => loadCustomers({ ...(route.query as object) }, true), 3000));
             })
-            .catch((error) => displayError(error));
+            .catch((error) => displayError(error))
+            .finally(() => (deleteLoading.value = false));
     }
 
     function onPageChange(page: number) {
+        removeTimeouts();
+
         loadCustomers({ page });
+    }
+
+    function removeTimeouts() {
+        timeouts.value.forEach((timeout) => clearTimeout(timeout));
     }
 
     onMounted(() => {
         const params = { ...(route.query as object) };
 
         loadCustomers(params);
+    });
+
+    onBeforeUnmount(() => {
+        removeTimeouts();
     });
 </script>
 
@@ -68,7 +83,12 @@
                     </div>
                     <div class="actions">
                         <button @click="$router.push(`/customers/${customer.id}/edit`)">Editar</button>
-                        <button @click="handleDelete(customer.id)">Delete</button>
+                        <button
+                            :disabled="deleteLoading"
+                            @click="handleDelete(customer.id)"
+                        >
+                            Delete
+                        </button>
                     </div>
                 </div>
             </li>
