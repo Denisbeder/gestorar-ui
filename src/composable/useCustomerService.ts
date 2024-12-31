@@ -22,7 +22,7 @@ export function useCustomerService() {
 
     function index(
         params?: Record<string, string | number>,
-    ): Promise<AxiosResponse<PaginationType<CustomerModelType>>> {
+    ): Promise<AxiosResponse<PaginationDataType<CustomerModelType>>> {
         return http.get('/api/customers', { params });
     }
 

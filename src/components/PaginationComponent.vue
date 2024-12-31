@@ -1,6 +1,7 @@
 <script setup lang="ts">
     type PropsType = {
-        links: PaginationType['links'];
+        links?: PaginationDataType['links'];
+        total?: PaginationDataType['total'];
     };
 
     defineProps<PropsType>();
@@ -29,7 +30,10 @@
 </script>
 
 <template>
-    <div class="pagination">
+    <div
+        v-if="total && total > 1"
+        class="pagination"
+    >
         <button
             v-for="link in links"
             :key="link.label"

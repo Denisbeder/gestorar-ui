@@ -19,9 +19,8 @@ type UserModelType = {
     updated_at: string;
 };
 
-type PaginationType<T = unknown> = {
+type PaginationType = {
     current_page: number;
-    data: T[];
     first_page_url: string;
     from: number;
     last_page: number;
@@ -34,6 +33,10 @@ type PaginationType<T = unknown> = {
     to: number;
     total: number;
 };
+
+type PaginationDataType<T = unknown> = {
+    data: T[];
+} & PaginationType;
 
 type AddressTypeType = 'home' | 'commercial' | 'billing';
 type ContactTypeType = 'text' | 'phone' | 'email';
