@@ -6,6 +6,8 @@
     import { displayError } from '@/utils.ts';
     import PaginationComponent from '@/components/PaginationComponent.vue';
     import LoadingComponent from '@/components/LoadingComponent.vue';
+    import PageContent from '@/components/PageContent.vue';
+    import PageHeader from '@/components/PageHeader.vue';
 
     const route = useRoute();
     const customerService = useCustomerService();
@@ -67,39 +69,59 @@
 </script>
 
 <template>
-    <button @click="$router.push('/customers/create')">Cadastrar</button>
+    <PageHeader title="Clientes">
+        <template #rightCol>
+            <div class="mt-4 flex shrink-0 md:ml-4 md:mt-0">
+                <button
+                    type="button"
+                    class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                >
+                    Filtrar
+                </button>
+                <button
+                    type="button"
+                    class="ml-3 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    @click="$router.push('/customers/create')"
+                >
+                    Cadastrar novo
+                </button>
+            </div>
+        </template>
+    </PageHeader>
 
-    <LoadingComponent :loading="loading">
-        <ul class="list-wrapper">
-            <li
-                v-for="customer in customers?.data"
-                :key="customer.id"
-            >
-                <div class="list-item">
-                    <div class="list-text">
-                        <span>#{{ customer.id }}</span>
-                        <span :class="customer.type">{{ customer.type }}</span>
-                        {{ customer.name }}
+    <PageContent>
+        <LoadingComponent :loading="loading">
+            <ul class="list-wrapper">
+                <li
+                    v-for="customer in customers?.data"
+                    :key="customer.id"
+                >
+                    <div class="list-item">
+                        <div class="list-text">
+                            <span>#{{ customer.id }}</span>
+                            <span :class="customer.type">{{ customer.type }}</span>
+                            {{ customer.name }}
+                        </div>
+                        <div class="actions">
+                            <button @click="$router.push(`/customers/${customer.id}/edit`)">Editar</button>
+                            <button
+                                :disabled="deleteLoading"
+                                @click="handleDelete(customer.id)"
+                            >
+                                Delete
+                            </button>
+                        </div>
                     </div>
-                    <div class="actions">
-                        <button @click="$router.push(`/customers/${customer.id}/edit`)">Editar</button>
-                        <button
-                            :disabled="deleteLoading"
-                            @click="handleDelete(customer.id)"
-                        >
-                            Delete
-                        </button>
-                    </div>
-                </div>
-            </li>
-        </ul>
+                </li>
+            </ul>
 
-        <PaginationComponent
-            :links="customers?.links"
-            :total="customers?.total"
-            @on-change="onPageChange"
-        />
-    </LoadingComponent>
+            <PaginationComponent
+                :links="customers?.links"
+                :total="customers?.total"
+                @on-change="onPageChange"
+            />
+        </LoadingComponent>
+    </PageContent>
 </template>
 
 <style lang="scss" scoped>

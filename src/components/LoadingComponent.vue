@@ -1,4 +1,6 @@
 <script setup lang="ts">
+    import LoaderIcon from '@/components/Icons/LoaderIcon.vue';
+
     type PropsType = {
         loading: boolean;
     };
@@ -11,56 +13,28 @@
 <template>
     <div
         v-if="$slots.default"
-        class="container"
+        class="relative"
         :class="{ loading: loading }"
     >
         <div
             v-if="loading"
-            class="loading-overlay"
+            class="absolute inset-0 flex items-center justify-center min-h-[30svh] h-full w-full"
         >
-            <progress></progress>
+            <LoaderIcon />
         </div>
 
-        <div class="content">
+        <div
+            class="w-full"
+            :class="{ 'opacity-[0.2]': loading }"
+        >
             <slot />
         </div>
     </div>
 
     <div
         v-else
-        class="page-loading-wrapper"
+        class="relative"
     >
-        <progress></progress>
+        <LoaderIcon />
     </div>
 </template>
-
-<style lang="scss" scoped>
-    .container {
-        position: relative;
-
-        .content {
-            width: 100%;
-        }
-
-        .loading-overlay {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            min-width: 100%;
-            min-height: 100%;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-        }
-
-        &.loading {
-            .content {
-                opacity: 0.2;
-            }
-        }
-    }
-</style>

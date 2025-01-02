@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, type RouteLocationNormalized, type Router } from 'vue-router';
 import { useAuthService } from '@/composable/useAuthService.ts';
-import AppLayout from "@/layouts/AppLayout.vue";
+import AppLayout from '@/layouts/AppLayout.vue';
 
 declare module 'vue-router' {
     interface RouteMeta {
@@ -23,7 +23,7 @@ const router: Router = createRouter({
             component: () => import('../views/Auth/LoginView.vue'),
             meta: { guest: true },
         },
-      {
+        {
             path: '/logout',
             name: 'Logout',
             component: () => import('../views/Auth/LoginView.vue'),
@@ -39,19 +39,19 @@ const router: Router = createRouter({
             path: '/customers',
             name: 'CustomersIndex',
             component: () => import('../views/Customer/CustomerIndexView.vue'),
-            meta: { requiresAuth: true, layout: AppLayout, title: 'Clientes' },
+            meta: { requiresAuth: true, layout: AppLayout },
         },
         {
             path: '/customers/create',
             name: 'CustomersCreate',
             component: () => import('../views/Customer/CustomerFormView.vue'),
-            meta: { requiresAuth: true, layout: AppLayout, title: 'Criar Cliente' },
+            meta: { requiresAuth: true, layout: AppLayout },
         },
         {
             path: '/customers/:id/edit',
             name: 'CustomersEdit',
             component: () => import('../views/Customer/CustomerFormView.vue'),
-            meta: { requiresAuth: true, layout: AppLayout, title: 'Editar Cliente' },
+            meta: { requiresAuth: true, layout: AppLayout },
         },
         {
             path: '/:pathMatch(.*)*',
@@ -70,9 +70,9 @@ router.beforeResolve(async (to: RouteLocationNormalized) => {
     const redirectToDashboard = { name: 'Dashboard' };
 
     if (to.name === 'Logout') {
-      await useAuthService().logout();
+        await useAuthService().logout();
 
-      return redirectToLogin;
+        return redirectToLogin;
     }
 
     if (isAuthenticated.value && isGuestPage) {

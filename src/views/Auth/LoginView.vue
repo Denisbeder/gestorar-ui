@@ -135,7 +135,7 @@
                         >
                             <LoaderIcon
                                 v-if="loading"
-                                class="size-5 animate-spin"
+                                class="size-5"
                             />
                             Entrar
                         </button>
