@@ -29,7 +29,7 @@ export function useAuthService() {
             await http.post('/login', credentials);
             await getUser();
         } catch (error) {
-            displayError(error as AxiosError<AxiosErrorDataType>);
+            displayError(error as AxiosError<AxiosErrorDataType>, { type: 'error', position: 'bottom-center' });
         }
     }
 

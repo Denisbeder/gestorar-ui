@@ -8,6 +8,7 @@ type AxiosErrorDataType = {
 type CredentialsType = {
     email: string;
     password: string;
+    remember: boolean;
 };
 
 type UserModelType = {
