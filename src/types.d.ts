@@ -88,6 +88,7 @@ type CompanyModelType = {
 type CustomerModelType = {
     id: number;
     name?: string;
+    document_id?: string;
     customerable_type: string;
     customerable_id: number;
     type: CustomerTypeType;

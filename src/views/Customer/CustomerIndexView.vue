@@ -8,6 +8,7 @@
     import LoadingComponent from '@/components/LoadingComponent.vue';
     import PageContent from '@/components/PageContent.vue';
     import PageHeader from '@/components/PageHeader.vue';
+    import TableComponent from '@/views/Customer/components/TableComponent.vue';
 
     const route = useRoute();
     const customerService = useCustomerService();
@@ -91,29 +92,10 @@
 
     <PageContent>
         <LoadingComponent :loading="loading">
-            <ul class="list-wrapper">
-                <li
-                    v-for="customer in customers?.data"
-                    :key="customer.id"
-                >
-                    <div class="list-item">
-                        <div class="list-text">
-                            <span>#{{ customer.id }}</span>
-                            <span :class="customer.type">{{ customer.type }}</span>
-                            {{ customer.name }}
-                        </div>
-                        <div class="actions">
-                            <button @click="$router.push(`/customers/${customer.id}/edit`)">Editar</button>
-                            <button
-                                :disabled="deleteLoading"
-                                @click="handleDelete(customer.id)"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                </li>
-            </ul>
+            <TableComponent
+                :records="customers?.data"
+                @on-delete="handleDelete"
+            />
 
             <PaginationComponent
                 :links="customers?.links"
