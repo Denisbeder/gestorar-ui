@@ -17,8 +17,20 @@ export function useHTTP() {
             await http.get('sanctum/csrf-cookie');
         }
 
-        return config;
+        return Promise.resolve(config);
     });
+
+    http.interceptors.response.use(
+        (config) => Promise.resolve(config),
+        (error) => {
+            if (error.response.status === 401 && error.response.config.url !== '/api/user') {
+                window.location.reload();
+                return;
+            }
+
+            return Promise.reject(error);
+        },
+    );
 
     return http;
 }
