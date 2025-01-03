@@ -103,7 +103,7 @@
     import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 
     type PropsType = {
-        records: CustomerModelType[];
+        records?: CustomerModelType[];
     };
 
     defineProps<PropsType>();
