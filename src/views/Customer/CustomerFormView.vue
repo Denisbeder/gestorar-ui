@@ -6,8 +6,8 @@
     import type { AxiosResponse } from 'axios';
     import { displayError } from '@/utils.ts';
     import LoadingComponent from '@/components/LoadingComponent.vue';
-    import PageHeader from '@/components/PageHeader.vue';
-    import PageContent from '@/components/PageContent.vue';
+    import PageHeaderComponent from '@/components/PageHeaderComponent.vue';
+    import PageContentComponent from '@/components/PageContentComponent.vue';
 
     const ADDRESS_TAG_ENUM = {
         home: 'Casa',
@@ -152,9 +152,9 @@
 
 <template>
     <form @submit.prevent="onSubmit">
-        <PageHeader :title="editMode ? 'Editar cliente' : 'Cadastrar cliente'" />
+        <PageHeaderComponent :title="editMode ? 'Editar cliente' : 'Cadastrar cliente'" />
 
-        <PageContent>
+        <PageContentComponent>
             <LoadingComponent :loading="loading">
                 <fieldset
                     v-if="!editMode"
@@ -462,7 +462,7 @@
                     Salvar
                 </button>
             </LoadingComponent>
-        </PageContent>
+        </PageContentComponent>
     </form>
 </template>
 

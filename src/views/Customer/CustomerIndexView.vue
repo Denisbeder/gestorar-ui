@@ -6,8 +6,8 @@
     import { displayError } from '@/utils.ts';
     import PaginationComponent from '@/components/PaginationComponent.vue';
     import LoadingComponent from '@/components/LoadingComponent.vue';
-    import PageContent from '@/components/PageContent.vue';
-    import PageHeader from '@/components/PageHeader.vue';
+    import PageContentComponent from '@/components/PageContentComponent.vue';
+    import PageHeaderComponent from '@/components/PageHeaderComponent.vue';
     import TableComponent from '@/views/Customer/components/TableComponent.vue';
 
     const route = useRoute();
@@ -70,7 +70,7 @@
 </script>
 
 <template>
-    <PageHeader title="Clientes">
+    <PageHeaderComponent title="Clientes">
         <template #rightCol>
             <div class="mt-4 flex shrink-0 md:ml-4 md:mt-0">
                 <button
@@ -88,22 +88,24 @@
                 </button>
             </div>
         </template>
-    </PageHeader>
+    </PageHeaderComponent>
 
-    <PageContent>
+    <PageContentComponent>
         <LoadingComponent :loading="loading">
-            <TableComponent
-                :records="customers?.data"
-                @on-delete="handleDelete"
-            />
+            <div class="bg-white rounded px-6">
+                <TableComponent
+                    :records="customers?.data"
+                    @on-delete="handleDelete"
+                />
 
-            <PaginationComponent
-                :links="customers?.links"
-                :total="customers?.total"
-                @on-change="onPageChange"
-            />
+                <PaginationComponent
+                    class="-mx-6"
+                    :total="customers?.total"
+                    @on-change="onPageChange"
+                />
+            </div>
         </LoadingComponent>
-    </PageContent>
+    </PageContentComponent>
 </template>
 
 <style lang="scss" scoped>
