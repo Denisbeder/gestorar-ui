@@ -98,6 +98,7 @@
                 />
 
                 <PaginationComponent
+                    v-if="customers?.data"
                     class="-mx-6"
                     :total="customers?.total"
                     @on-change="onPageChange"

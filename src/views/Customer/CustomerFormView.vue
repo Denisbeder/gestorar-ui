@@ -11,7 +11,6 @@
     import ArrowNarrowLeft from '@/components/Icons/ArrowNarrowLeft.vue';
     import LoaderIcon from '@/components/Icons/LoaderIcon.vue';
     import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
-    import TrashIcon from '@/components/Icons/TrashIcon.vue';
     import XIcon from '@/components/Icons/XIcon.vue';
     import PlusIcon from '@/components/Icons/PlusIcon.vue';
 
@@ -26,6 +25,7 @@
     const customerService = useCustomerService();
 
     const loading = ref<boolean>(false);
+    const submitting = ref<boolean>(false);
     const editMode = ref<boolean>(false);
     const form = reactive<CustomerFormType>({
         type: 'cpf',
@@ -40,6 +40,7 @@
     });
 
     function onSubmit() {
+        submitting.value = true;
         loading.value = true;
 
         toast.clearAll();
@@ -69,7 +70,10 @@
         promise
             .then(() => toast.success('Cliente salvo'))
             .catch((error) => displayError(error))
-            .finally(() => (loading.value = false));
+            .finally(() => {
+                submitting.value = false;
+                loading.value = false;
+            });
     }
 
     function handleAddAddress() {
@@ -174,7 +178,7 @@
                     @click="$router.push('/customers/create')"
                 >
                     <LoaderIcon
-                        v-if="loading"
+                        v-if="submitting"
                         class="size-5"
                     />
                     Salvar
@@ -561,6 +565,41 @@
                                         class="form-input mt-2"
                                         :name="`address_complement[${index}]`"
                                     />
+                                </div>
+
+                                <div class="sm:col-span-full">
+                                    <label class="label">Tipo de endereço</label>
+                                    <div class="flex gap-4 items-center mt-2">
+                                        <label class="text-sm flex items-center gap-2">
+                                            <input
+                                                v-model="address.type"
+                                                type="radio"
+                                                :name="`type[${index}]`"
+                                                value="home"
+                                            />
+                                            Casa
+                                        </label>
+
+                                        <label class="text-sm flex items-center gap-2">
+                                            <input
+                                                v-model="address.type"
+                                                type="radio"
+                                                :name="`type[${index}]`"
+                                                value="commercial"
+                                            />
+                                            Comercial
+                                        </label>
+
+                                        <label class="text-sm flex items-center gap-2">
+                                            <input
+                                                v-model="address.type"
+                                                type="radio"
+                                                :name="`type[${index}]`"
+                                                value="billing"
+                                            />
+                                            Cobrança
+                                        </label>
+                                    </div>
                                 </div>
 
                                 <button
