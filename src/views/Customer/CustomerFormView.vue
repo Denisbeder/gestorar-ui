@@ -39,41 +39,36 @@
         contacts: [],
     });
 
-    function onSubmit() {
+    async function sendForm(): void {
+        toast.clearAll();
+
+        let response: AxiosResponse<CustomerModelType>;
+
+        if (editMode.value) {
+            response = await customerService.update(Number(route.params.id), form);
+
+            setForm(response.data);
+        } else {
+            response = await customerService.store(form);
+        }
+
+        await router.push({ name: 'CustomersEdit', params: { id: response.data.id } });
+
+        toast.success('Cliente salvo');
+    }
+
+    async function onSubmit() {
         submitting.value = true;
         loading.value = true;
 
-        toast.clearAll();
-
-        const promise = new Promise((resolve, reject) => {
-            if (editMode.value) {
-                customerService
-                    .update(Number(route.params.id), form)
-                    .then((response: AxiosResponse<CustomerModelType>) => {
-                        setForm(response.data);
-                        resolve(response);
-                    })
-                    .catch((error) => reject(error));
-
-                return;
-            }
-
-            customerService
-                .store(form)
-                .then(async (response) => {
-                    await router.push({ name: 'CustomersEdit', params: { id: response.data.id } });
-                    resolve(response);
-                })
-                .catch((error) => reject(error));
-        });
-
-        promise
-            .then(() => toast.success('Cliente salvo'))
-            .catch((error) => displayError(error))
-            .finally(() => {
-                submitting.value = false;
-                loading.value = false;
-            });
+        try {
+            await sendForm();
+        } catch (error) {
+            displayError(error);
+        } finally {
+            submitting.value = false;
+            loading.value = false;
+        }
     }
 
     function handleAddAddress() {
@@ -175,7 +170,6 @@
                 <button
                     type="submit"
                     class="ml-3 btn btn--primary"
-                    @click="$router.push('/customers/create')"
                 >
                     <LoaderIcon
                         v-if="submitting"

@@ -35,6 +35,8 @@
             return;
         }
 
+        removeTimeouts();
+
         deleteLoading.value = true;
 
         customerService
