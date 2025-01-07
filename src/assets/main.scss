@@ -3,10 +3,26 @@
 
 @layer components {
     .btn {
-        @apply inline-flex gap-1.5 items-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ;
+        @apply inline-flex gap-1.5 items-center justify-center rounded-md px-3 py-2 whitespace-nowrap text-sm text-center font-semibold shadow-sm ring-1 ring-inset ring-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+
+        &--square {
+          @apply rounded-full p-1 size-9;
+        }
+
+        &--sm {
+          @apply px-2 py-1 text-xs;
+
+          &.btn--square {
+            @apply size-6 p-1;
+          }
+        }
+
+        &--link {
+          @apply text-neutral shadow-none decoration-neutral underline-offset-4 decoration-2 focus-visible:underline focus-visible:outline-none;
+        }
 
         &--neutral {
-          @apply text-neutral shadow-none decoration-neutral underline-offset-4 decoration-2 focus-visible:underline focus-visible:outline-none;
+          @apply bg-neutral hover:bg-neutral/85 text-white shadow-sm focus-visible:outline-neutral;
         }
 
         &--white {
@@ -52,5 +68,14 @@
 
     .form-input {
       @apply block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primary sm:text-sm/6;
+    }
+
+    .form-checkbox {
+      @apply appearance-none relative size-4 shrink-0 rounded-sm ring-1 checked:bg-primary ring-inset ring-gray-300 checked:ring-transparent outline-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+
+      &:checked::after {
+        content: '✓';
+        @apply absolute flex items-center justify-center pb-0.5 inset-0 text-xs font-semibold text-white;
+      }
     }
 }

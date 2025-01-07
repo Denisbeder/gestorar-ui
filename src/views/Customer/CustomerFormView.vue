@@ -11,6 +11,9 @@
     import ArrowNarrowLeft from '@/components/Icons/ArrowNarrowLeft.vue';
     import LoaderIcon from '@/components/Icons/LoaderIcon.vue';
     import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
+    import TrashIcon from '@/components/Icons/TrashIcon.vue';
+    import XIcon from '@/components/Icons/XIcon.vue';
+    import PlusIcon from '@/components/Icons/PlusIcon.vue';
 
     const ADDRESS_TAG_ENUM = {
         home: 'Casa',
@@ -181,7 +184,7 @@
 
         <PageContentComponent>
             <LoadingComponent :loading="loading">
-                <div class="flex flex-col gap-8">
+                <div class="flex flex-col gap-y-12">
                     <div class="card-container">
                         <div>
                             <h2 class="card-title">Tipo de cliente</h2>
@@ -236,7 +239,7 @@
                         <div>
                             <h2 class="card-title">Dados da Pessoa</h2>
                         </div>
-                        <div class="card">
+                        <div class="card card--grid">
                             <div class="sm:col-span-3">
                                 <label
                                     for="first-name"
@@ -294,7 +297,7 @@
                         <div>
                             <h2 class="card-title">Dados da Empresa</h2>
                         </div>
-                        <div class="card">
+                        <div class="card card--grid">
                             <div class="sm:col-span-3">
                                 <label
                                     for="name"
@@ -349,123 +352,98 @@
                         <div>
                             <h2 class="card-title">Contatos</h2>
                         </div>
-                        <div class="card">conta</div>
+                        <div class="card flex flex-col gap-8">
+                            <div
+                                v-for="(contact, index) in form.contacts"
+                                :key="`contact_${index}`"
+                                class="relative grid grid-col-1 sm:grid-cols-6 gap-3 border bg-gray-50 p-4 rounded-md"
+                            >
+                                <div class="sm:col-span-2">
+                                    <label
+                                        for="contact-value"
+                                        class="label"
+                                    >
+                                        Telefone ou E-mail
+                                    </label>
+                                    <input
+                                        id="contact-value"
+                                        v-model="contact.value"
+                                        type="text"
+                                        autocomplete="off"
+                                        class="form-input mt-2"
+                                        :name="`contact_value[${index}]`"
+                                        @keyup="updateContact(contact)"
+                                    />
+                                </div>
+
+                                <div class="sm:col-span-3">
+                                    <label
+                                        for="contact-description"
+                                        class="label"
+                                    >
+                                        Descrição
+                                    </label>
+                                    <input
+                                        id="contact-description"
+                                        v-model="contact.description"
+                                        type="text"
+                                        autocomplete="off"
+                                        class="form-input mt-2"
+                                        :name="`contact_description[${index}]`"
+                                    />
+                                </div>
+
+                                <div
+                                    v-if="contact?.properties?.whatsapp !== undefined"
+                                    class="sm:col-span-1 flex items-center"
+                                >
+                                    <div class="flex items-center gap-2">
+                                        <label
+                                            :for="`contact_whatsapp[${index}]`"
+                                            class="label"
+                                        >
+                                            Tem WhatsApp
+                                        </label>
+                                        <input
+                                            :id="`contact_whatsapp[${index}]`"
+                                            type="checkbox"
+                                            autocomplete="off"
+                                            class="form-checkbox"
+                                            :name="`contact_whatsapp[${index}]`"
+                                        />
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    title="Remover contato"
+                                    class="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 btn btn--square btn--white btn--sm"
+                                    @click="handleRemoveContact(index)"
+                                >
+                                    <XIcon class="size-8" />
+                                </button>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="btn btn--primary"
+                                @click="handleAddContact"
+                            >
+                                <PlusIcon class="size-4" /> Add Contato
+                            </button>
+                        </div>
                     </div>
 
                     <div class="card-container">
                         <div>
                             <h2 class="card-title">Endereços</h2>
                         </div>
-                        <div class="card">END</div>
+                        <div class="card card--grid">END</div>
                     </div>
                 </div>
             </LoadingComponent>
             <!--            <LoadingComponent :loading="loading">
-                <fieldset
-                    v-if="!editMode"
-                    :disabled="loading"
-                >
-                    <legend>Tipo de cadastro</legend>
 
-                    <div class="form-control inline">
-                        <label class="form-control">
-                            CPF
-                            <input
-                                v-model="form.type"
-                                class="form-radio"
-                                type="radio"
-                                name="type"
-                                value="cpf"
-                            />
-                        </label>
-
-                        <label class="form-control">
-                            CNPJ
-                            <input
-                                v-model="form.type"
-                                class="form-radio"
-                                type="radio"
-                                name="type"
-                                value="cnpj"
-                            />
-                        </label>
-                    </div>
-                </fieldset>
-
-                <fieldset
-                    v-if="form.type === 'cpf'"
-                    :disabled="loading"
-                >
-                    <legend>Dados da pessoa</legend>
-
-                    <div class="form-control inline">
-                        <label class="form-control">
-                            Primeiro nome
-                            <input
-                                v-model="form.first_name"
-                                type="text"
-                                name="first_name"
-                            />
-                        </label>
-
-                        <label class="form-control">
-                            Sobrenome
-                            <input
-                                v-model="form.last_name"
-                                type="text"
-                                name="last_name"
-                            />
-                        </label>
-
-                        <label class="form-control">
-                            CPF
-                            <input
-                                v-model="form.cpf"
-                                type="text"
-                                name="cpf"
-                            />
-                        </label>
-                    </div>
-                </fieldset>
-
-                <fieldset
-                    v-if="form.type === 'cnpj'"
-                    :disabled="loading"
-                >
-                    <legend>Dados da empresa</legend>
-
-                    <label class="form-control">
-                        Nome
-                        <input
-                            v-model="form.name"
-                            type="text"
-                            name="name"
-                        />
-                    </label>
-
-                    <div class="form-control inline">
-                        <label
-                            class="form-control"
-                            style="max-width: 30%"
-                        >
-                            CNPJ
-                            <input
-                                v-model="form.cnpj"
-                                type="text"
-                                name="cnpj"
-                            />
-                        </label>
-
-                        <label class="form-control">
-                            Razão Social
-                            <input
-                                v-model="form.legal_name"
-                                type="text"
-                                name="legal_name"
-                            />
-                        </label>
-                    </div>
-                </fieldset>
 
                 <fieldset :disabled="loading">
                     <legend>Contatos</legend>
@@ -675,11 +653,15 @@
 
 <style lang="scss" scoped>
     .card-container {
-        @apply grid grid-cols-1 sm:grid-cols-[300px_1fr];
+        @apply grid grid-cols-1 sm:grid-cols-[300px_1fr] gap-y-4;
     }
 
     .card {
-        @apply -mx-4 sm:mx-0 px-4 py-6 sm:p-8 bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6;
+        @apply -mx-4 sm:mx-0 px-4 py-6 sm:p-8 bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl;
+
+        &--grid {
+            @apply grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6;
+        }
     }
 
     .card-title {
