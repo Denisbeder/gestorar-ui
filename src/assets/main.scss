@@ -1,2 +1,40 @@
 @use 'base.scss';
 @use 'vue3-toastify/dist/index.css';
+
+@layer components {
+    .btn {
+        @apply inline-flex gap-1.5 items-center rounded-md px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ;
+
+        &--neutral {
+          @apply text-neutral shadow-none decoration-neutral underline-offset-4 decoration-2 focus-visible:underline focus-visible:outline-none;
+        }
+
+        &--white {
+          @apply bg-white hover:bg-gray-50 text-gray-900 ring-gray-300 focus-visible:outline-gray-500;
+        }
+
+        &--white-outline {
+          @apply bg-transparent hover:bg-gray-50 text-white ring-white focus-visible:outline-white;
+        }
+
+        &--primary {
+          @apply bg-primary hover:bg-primary/85 text-white shadow-sm focus-visible:outline-primary;
+        }
+
+        &--primary-outline {
+          @apply bg-transparent hover:bg-primary/[.05] text-primary ring-primary focus-visible:outline-primary;
+        }
+
+        &--danger {
+          @apply bg-danger hover:bg-danger/85 text-white shadow-sm focus-visible:outline-danger;
+        }
+
+        &--danger-outline {
+          @apply bg-transparent hover:bg-danger/[.05] text-danger ring-danger focus-visible:outline-danger;
+        }
+    }
+
+    .input {
+      @apply form-input block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6;
+    }
+}

@@ -18,7 +18,7 @@
     >
         <div
             v-if="loading"
-            class="absolute inset-0 flex items-center justify-center min-h-[30svh] h-full w-full"
+            class="z-40 absolute inset-0 flex items-center justify-center min-h-[30svh] h-full w-full"
         >
             <LoaderIcon />
         </div>

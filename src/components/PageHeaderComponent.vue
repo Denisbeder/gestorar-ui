@@ -7,7 +7,7 @@
 </script>
 
 <template>
-    <header class="bg-white shadow-sm">
+    <header class="bg-white shadow-sm sticky top-0 z-10">
         <div class="mx-auto md:flex md:items-center md:justify-between max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
             <div
                 v-if="title"
@@ -22,8 +22,12 @@
                 v-if="$slots.rightCol"
                 class="mt-4 flex md:ml-4 md:mt-0"
             >
-                <slot name="rightCol" />
+                <div class="mt-4 flex shrink-0 md:ml-4 md:mt-0">
+                    <slot name="rightCol" />
+                </div>
             </div>
+
+            <slot />
         </div>
     </header>
 </template>

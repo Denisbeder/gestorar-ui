@@ -31,7 +31,7 @@
             <div class="flex flex-none items-center gap-x-4">
                 <a
                     :href="`/customers/${record.id}/edit`"
-                    class="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
+                    class="hidden sm:block btn btn--white"
                     >Visualizar<span class="sr-only">, {{ record.name }}</span></a
                 >
                 <Menu
@@ -40,20 +40,7 @@
                 >
                     <MenuButton class="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
                         <span class="sr-only">Mais opções</span>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            class="size-5"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
-                            />
-                        </svg>
+                        <DotsVertical class="size-5" />
                     </MenuButton>
                     <transition
                         enter-active-class="transition ease-out duration-100"
@@ -99,6 +86,7 @@
 
 <script lang="ts" setup>
     import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
+    import DotsVertical from '@/components/Icons/DotsVertical.vue';
 
     type PropsType = {
         records?: CustomerModelType[];
