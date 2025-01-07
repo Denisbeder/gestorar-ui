@@ -34,7 +34,23 @@
         }
     }
 
-    .input {
-      @apply form-input block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6;
+    .label {
+      @apply block text-sm/6 font-medium text-gray-900;
+    }
+
+    .radio-group {
+      @apply flex cursor-pointer items-center justify-center rounded-md px-3 py-2 text-sm font-semibold uppercase sm:flex-1 bg-white text-gray-900 ring-1 ring-gray-300 hover:bg-gray-50;
+
+      &--active {
+        @apply ring-2 ring-primary ring-offset-2;
+      }
+
+      &--checked {
+        @apply bg-primary text-white ring-0 hover:bg-indigo-500;
+      }
+    }
+
+    .form-input {
+      @apply block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primary sm:text-sm/6;
     }
 }
