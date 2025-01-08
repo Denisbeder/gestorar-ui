@@ -14,7 +14,7 @@
                             <p class="text-sm/6 font-semibold text-gray-900">{{ record.name }}</p>
                             <p
                                 :class="[
-                                    types[record.type],
+                                    CustomerTypes[record.type],
                                     'mt-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset uppercase',
                                 ]"
                             >
@@ -107,7 +107,7 @@
     defineProps<PropsType>();
     const emit = defineEmits<EmitsType>();
 
-    const types = {
+    const CustomerTypes = {
         cpf: 'text-green-700 bg-green-50 ring-green-600/20',
         cnpj: 'text-yellow-800 bg-yellow-50 ring-yellow-600/20',
     };
