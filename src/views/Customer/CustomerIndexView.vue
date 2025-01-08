@@ -14,7 +14,7 @@
     const customerService = useCustomerService();
 
     const loading = ref<boolean>(false);
-    const deleteLoading = ref<boolean>(false);
+    const processingRecords = ref<number[]>([]);
     const customers = ref<PaginationDataType<CustomerModelType> | null>(null);
     const timeouts = ref<ReturnType<typeof setTimeout>[]>([]);
 
@@ -37,7 +37,7 @@
 
         removeTimeouts();
 
-        deleteLoading.value = true;
+        processingRecords.value.push(id);
 
         customerService
             .destroy(id)
@@ -47,7 +47,9 @@
                 timeouts.value.push(setTimeout(() => loadCustomers({ ...(route.query as object) }, true), 3000));
             })
             .catch((error) => displayError(error))
-            .finally(() => (deleteLoading.value = false));
+            .finally(() => {
+                processingRecords.value = processingRecords.value.filter((record) => record !== id);
+            });
     }
 
     function onPageChange(page: number) {
@@ -92,15 +94,19 @@
     </PageHeaderComponent>
 
     <PageContentComponent>
-        <LoadingComponent :loading="loading">
+        <LoadingComponent
+            class="min-h-[30svh]"
+            :loading="loading"
+        >
             <div class="bg-white rounded px-6">
                 <TableComponent
                     :records="customers?.data"
+                    :processing-records="processingRecords"
                     @on-delete="handleDelete"
                 />
 
                 <PaginationComponent
-                    v-if="customers?.data"
+                    v-if="customers?.total"
                     class="-mx-6"
                     :total="customers?.total"
                     @on-change="onPageChange"

@@ -2,6 +2,14 @@
 @use 'vue3-toastify/dist/index.css';
 
 @layer components {
+    .is-disabled {
+      @apply opacity-75 cursor-not-allowed;
+    }
+
+    .btn, .form-input, .form-checkbox, .radio-group {
+      @apply disabled:opacity-75 disabled:cursor-not-allowed;
+    }
+
     .btn {
         @apply inline-flex gap-1.5 items-center justify-center rounded-md px-3 py-2 whitespace-nowrap text-sm text-center font-semibold shadow-sm ring-1 ring-inset ring-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
 

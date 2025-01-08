@@ -59,7 +59,6 @@
 
     async function onSubmit() {
         submitting.value = true;
-        loading.value = true;
 
         try {
             await sendForm();
@@ -67,7 +66,6 @@
             displayError(error);
         } finally {
             submitting.value = false;
-            loading.value = false;
         }
     }
 
@@ -170,6 +168,7 @@
                 <button
                     type="submit"
                     class="ml-3 btn btn--primary"
+                    :disabled="submitting"
                 >
                     <LoaderIcon
                         v-if="submitting"
@@ -191,9 +190,10 @@
                         <RadioGroup
                             v-model="form.type"
                             class="mt-2 grid grid-cols-3 gap-3 sm:grid-cols-6"
+                            :disabled="submitting"
                         >
                             <RadioGroupOption
-                                v-slot="{ active, checked }"
+                                v-slot="{ active, checked, disabled }"
                                 as="template"
                                 value="cpf"
                             >
@@ -204,6 +204,7 @@
                                         'radio-group--checked': checked,
                                         'ring-inset': !active && !checked,
                                         'ring-2': active && checked,
+                                        'is-disabled': disabled,
                                     }"
                                 >
                                     CPF
@@ -211,7 +212,7 @@
                             </RadioGroupOption>
 
                             <RadioGroupOption
-                                v-slot="{ active, checked }"
+                                v-slot="{ active, checked, disabled }"
                                 as="template"
                                 value="cnpj"
                             >
@@ -222,6 +223,7 @@
                                         'radio-group--checked': checked,
                                         'ring-inset': !active && !checked,
                                         'ring-2': active && checked,
+                                        'is-disabled border-red-500': disabled,
                                     }"
                                 >
                                     CNPJ
@@ -251,6 +253,7 @@
                                     name="first_name"
                                     autocomplete="off"
                                     class="form-input mt-2"
+                                    :disabled="submitting"
                                 />
                             </div>
 
@@ -267,6 +270,7 @@
                                     name="last-name"
                                     autocomplete="off"
                                     class="form-input mt-2"
+                                    :disabled="submitting"
                                 />
                             </div>
 
@@ -283,6 +287,7 @@
                                     name="cpf"
                                     autocomplete="off"
                                     class="form-input mt-2"
+                                    :disabled="submitting"
                                 />
                             </div>
                         </div>
@@ -309,6 +314,7 @@
                                     name="name"
                                     autocomplete="off"
                                     class="form-input mt-2"
+                                    :disabled="submitting"
                                 />
                             </div>
 
@@ -325,6 +331,7 @@
                                     name="legal-name"
                                     autocomplete="off"
                                     class="form-input mt-2"
+                                    :disabled="submitting"
                                 />
                             </div>
 
@@ -341,6 +348,7 @@
                                     name="cnpj"
                                     autocomplete="off"
                                     class="form-input mt-2"
+                                    :disabled="submitting"
                                 />
                             </div>
                         </div>
@@ -370,6 +378,7 @@
                                         autocomplete="off"
                                         class="form-input mt-2"
                                         :name="`contact_value[${index}]`"
+                                        :disabled="submitting"
                                         @keyup="updateContact(contact)"
                                     />
                                 </div>
@@ -388,6 +397,7 @@
                                         autocomplete="off"
                                         class="form-input mt-2"
                                         :name="`contact_description[${index}]`"
+                                        :disabled="submitting"
                                     />
                                 </div>
 
@@ -408,6 +418,7 @@
                                             autocomplete="off"
                                             class="form-checkbox"
                                             :name="`contact_whatsapp[${index}]`"
+                                            :disabled="submitting"
                                         />
                                     </div>
                                 </div>
@@ -416,6 +427,7 @@
                                     type="button"
                                     title="Remover contato"
                                     class="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 btn btn--square btn--white btn--sm"
+                                    :disabled="submitting"
                                     @click="handleRemoveContact(index)"
                                 >
                                     <XIcon class="size-8" />
@@ -425,6 +437,7 @@
                             <button
                                 type="button"
                                 class="btn btn--primary"
+                                :disabled="submitting"
                                 @click="handleAddContact"
                             >
                                 <PlusIcon class="size-4" /> Add Contato
@@ -456,6 +469,7 @@
                                         autocomplete="off"
                                         class="form-input mt-2"
                                         :name="`address_zipcode[${index}]`"
+                                        :disabled="submitting"
                                     />
                                 </div>
 
@@ -473,6 +487,7 @@
                                         autocomplete="off"
                                         class="form-input mt-2"
                                         :name="`address_street[${index}]`"
+                                        :disabled="submitting"
                                     />
                                 </div>
 
@@ -490,6 +505,7 @@
                                         autocomplete="off"
                                         class="form-input mt-2"
                                         :name="`address_number[${index}]`"
+                                        :disabled="submitting"
                                     />
                                 </div>
 
@@ -507,6 +523,7 @@
                                         autocomplete="off"
                                         class="form-input mt-2"
                                         :name="`address_neighborhood[${index}]`"
+                                        :disabled="submitting"
                                     />
                                 </div>
 
@@ -524,6 +541,7 @@
                                         autocomplete="off"
                                         class="form-input mt-2"
                                         :name="`address_city[${index}]`"
+                                        :disabled="submitting"
                                     />
                                 </div>
 
@@ -541,6 +559,7 @@
                                         autocomplete="off"
                                         class="form-input mt-2"
                                         :name="`address_state[${index}]`"
+                                        :disabled="submitting"
                                     />
                                 </div>
 
@@ -558,6 +577,7 @@
                                         autocomplete="off"
                                         class="form-input mt-2"
                                         :name="`address_complement[${index}]`"
+                                        :disabled="submitting"
                                     />
                                 </div>
 
@@ -568,8 +588,9 @@
                                             <input
                                                 v-model="address.type"
                                                 type="radio"
-                                                :name="`type[${index}]`"
                                                 value="home"
+                                                :name="`address_type[${index}]`"
+                                                :disabled="submitting"
                                             />
                                             Casa
                                         </label>
@@ -578,8 +599,9 @@
                                             <input
                                                 v-model="address.type"
                                                 type="radio"
-                                                :name="`type[${index}]`"
                                                 value="commercial"
+                                                :name="`address_type[${index}]`"
+                                                :disabled="submitting"
                                             />
                                             Comercial
                                         </label>
@@ -588,8 +610,9 @@
                                             <input
                                                 v-model="address.type"
                                                 type="radio"
-                                                :name="`type[${index}]`"
                                                 value="billing"
+                                                :name="`address_type[${index}]`"
+                                                :disabled="submitting"
                                             />
                                             Cobrança
                                         </label>
@@ -609,6 +632,7 @@
                             <button
                                 type="button"
                                 class="btn btn--primary"
+                                :disabled="submitting"
                                 @click="handleAddAddress"
                             >
                                 <PlusIcon class="size-4" /> Add Endereço
@@ -617,211 +641,6 @@
                     </div>
                 </div>
             </LoadingComponent>
-            <!--            <LoadingComponent :loading="loading">
-
-
-                <fieldset :disabled="loading">
-                    <legend>Contatos</legend>
-
-                    <template
-                        v-for="(contact, index) in form.contacts"
-                        :key="`contact_${index}`"
-                    >
-                        <div class="form-control inline">
-                            <label
-                                class="form-control"
-                                style="max-width: 20%"
-                            >
-                                <input
-                                    v-model="contact.value"
-                                    placeholder="Telefone ou E-mail"
-                                    type="text"
-                                    :name="`contact_value[${index}]`"
-                                    @keyup="updateContact(contact)"
-                                />
-                            </label>
-
-                            <label
-                                class="form-control"
-                                style="max-width: 20%"
-                            >
-                                <input
-                                    v-model="contact.description"
-                                    placeholder="Descrição do contato"
-                                    type="text"
-                                    :name="`contact_description[${index}]`"
-                                />
-                            </label>
-
-                            <label
-                                v-if="contact?.properties?.whatsapp !== undefined"
-                                class="form-control inline"
-                                style="max-width: fit-content; align-items: center"
-                            >
-                                Tem Whatsapp
-                                <input
-                                    v-model="contact.properties.whatsapp"
-                                    type="checkbox"
-                                    :name="`contact_properties_whatsapp[${index}]`"
-                                />
-                            </label>
-
-                            <button
-                                style="max-width: 80px"
-                                type="button"
-                                @click="handleRemoveContact(index)"
-                            >
-                                Remover
-                            </button>
-                        </div>
-                    </template>
-
-                    <button
-                        type="button"
-                        @click="handleAddContact"
-                    >
-                        + ADD CONTATO
-                    </button>
-                </fieldset>
-
-                <fieldset :disabled="loading">
-                    <legend>Endereços</legend>
-
-                    <fieldset
-                        v-for="(address, index) in form.addresses"
-                        :key="`address-${index}`"
-                    >
-                        <legend>{{ ADDRESS_TAG_ENUM[address?.type ?? 'home'] }}</legend>
-
-                        <div class="form-control inline">
-                            <label class="form-control">
-                                Casa
-                                <input
-                                    v-model="address.type"
-                                    type="radio"
-                                    :name="`type[${index}]`"
-                                    value="home"
-                                />
-                            </label>
-
-                            <label class="form-control">
-                                Comercial
-                                <input
-                                    v-model="address.type"
-                                    type="radio"
-                                    :name="`type[${index}]`"
-                                    value="commercial"
-                                />
-                            </label>
-
-                            <label class="form-control">
-                                Cobrança
-                                <input
-                                    v-model="address.type"
-                                    type="radio"
-                                    :name="`type[${index}]`"
-                                    value="billing"
-                                />
-                            </label>
-                        </div>
-
-                        <div class="form-control inline">
-                            <label
-                                class="form-control"
-                                style="max-width: 20%"
-                            >
-                                CEP
-                                <input
-                                    v-model="address.zipcode"
-                                    type="text"
-                                    :name="`zipcode[${index}]`"
-                                />
-                            </label>
-
-                            <label class="form-control">
-                                Rua
-                                <input
-                                    v-model="address.street"
-                                    type="text"
-                                    :name="`street[${index}]`"
-                                />
-                            </label>
-
-                            <label
-                                class="form-control"
-                                style="max-width: 20%"
-                            >
-                                Número
-                                <input
-                                    v-model="address.number"
-                                    type="text"
-                                    :name="`number[${index}]`"
-                                />
-                            </label>
-                        </div>
-
-                        <div class="form-control inline">
-                            <label class="form-control">
-                                Bairro
-                                <input
-                                    v-model="address.neighborhood"
-                                    type="text"
-                                    :name="`neighborhood[${index}]`"
-                                />
-                            </label>
-
-                            <label class="form-control">
-                                Cidade
-                                <input
-                                    v-model="address.city"
-                                    type="text"
-                                    :name="`city[${index}]`"
-                                />
-                            </label>
-
-                            <label class="form-control">
-                                Estado
-                                <input
-                                    v-model="address.state"
-                                    type="text"
-                                    :name="`state[${index}]`"
-                                />
-                            </label>
-                        </div>
-
-                        <label class="form-control">
-                            Complemento
-                            <input
-                                v-model="address.complement"
-                                type="text"
-                                :name="`state[${index}]`"
-                            />
-                        </label>
-
-                        <button
-                            type="button"
-                            :disabled="loading"
-                            @click="handleRemoveAddress(index)"
-                        >
-                            Remover endereço
-                        </button>
-                    </fieldset>
-
-                    <button
-                        type="button"
-                        @click="handleAddAddress"
-                    >
-                        + ADD ENDEREÇO
-                    </button>
-                </fieldset>
-
-                <button
-                    type="submit"
-                    :disabled="loading"
-                >
-                    Salvar
-                </button>
-            </LoadingComponent>-->
         </PageContentComponent>
     </form>
 </template>
