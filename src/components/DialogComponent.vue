@@ -1,7 +1,7 @@
 <template>
     <TransitionRoot
         appear
-        :show="isOpen"
+        :show="isOpen || open"
         as="template"
     >
         <Dialog
@@ -68,6 +68,7 @@
 
     type PropsType = {
         title?: string;
+        open?: boolean;
     };
 
     defineProps<PropsType>();

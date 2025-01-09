@@ -11,6 +11,7 @@
     import DialogComponent from '@/components/DialogComponent.vue';
     import TableComponent from '@/views/Customer/components/TableComponent.vue';
     import { useConfirmDialog } from '@vueuse/core';
+    import ConfirmDialogComponent from '@/components/ConfirmDialogComponent.vue';
 
     const route = useRoute();
     const customerService = useCustomerService();
@@ -120,34 +121,11 @@
         </LoadingComponent>
     </PageContentComponent>
 
-    <DialogComponent
-        v-model="isRevealed"
-        title="Atenção"
-    >
-        <div class="mt-2 text-sm text-gray-500">
-            Você tem certeza que deseja deletear esse cliente? Todas as informações dele serão perdidas permanentemente.
-            Essa ação não pode ser desfeita.
-        </div>
-
-        <template #footer>
-            <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                <button
-                    type="button"
-                    class="w-full sm:ml-3 sm:w-auto btn btn--danger"
-                    @click="confirm"
-                >
-                    Deletar
-                </button>
-                <button
-                    type="button"
-                    class="mt-3 w-full sm:mt-0 sm:w-auto btn btn--white"
-                    @click="cancel"
-                >
-                    Cancelar
-                </button>
-            </div>
-        </template>
-    </DialogComponent>
+    <ConfirmDialogComponent
+        :open="isRevealed"
+        @on-confirm="confirm"
+        @on-cancel="cancel"
+    />
 </template>
 
 <style lang="scss" scoped>
