@@ -8,6 +8,7 @@
             as="div"
             @close="handleClose"
             class="relative z-10"
+            v-bind="$attrs"
         >
             <TransitionChild
                 as="template"
@@ -75,8 +76,5 @@
 
     function handleClose() {
         isOpen.value = false;
-    }
-    function handleOpen() {
-        isOpen.value = true;
     }
 </script>

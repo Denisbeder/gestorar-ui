@@ -129,7 +129,7 @@
             Essa ação não pode ser desfeita.
         </div>
 
-        <template #footer="{ close }">
+        <template #footer>
             <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                 <button
                     type="button"
