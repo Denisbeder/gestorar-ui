@@ -25,7 +25,7 @@
 
         <div
             class="w-full"
-            :class="{ 'opacity-[0.45]': loading }"
+            :class="{ 'opacity-[0.45] [&>*]:pointer-events-none': loading }"
         >
             <slot />
         </div>
