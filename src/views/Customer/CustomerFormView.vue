@@ -15,8 +15,8 @@
     import PlusIcon from '@/components/Icons/PlusIcon.vue';
 
     const CustomerTypes = {
-      cpf: 'text-green-700 bg-green-50 ring-green-600/20',
-      cnpj: 'text-yellow-800 bg-yellow-50 ring-yellow-600/20',
+        cpf: 'text-green-700 bg-green-50 ring-green-600/20',
+        cnpj: 'text-yellow-800 bg-yellow-50 ring-yellow-600/20',
     };
 
     const route = useRoute();
@@ -167,7 +167,7 @@
                 <button
                     type="submit"
                     class="ml-3 btn btn--primary"
-                    :disabled="submitting"
+                    :disabled="submitting || loading"
                 >
                     <LoaderIcon
                         v-if="submitting"
@@ -186,7 +186,11 @@
                             <h2 class="card-title">Tipo de cliente</h2>
                         </div>
 
-                        <div v-if="editMode" class="rounded-md px-3 py-2 uppercase w-min" :class="CustomerTypes[form.type]">
+                        <div
+                            v-if="editMode"
+                            class="rounded-md px-3 py-2 uppercase w-min"
+                            :class="CustomerTypes[form.type]"
+                        >
                             {{ form.type }}
                         </div>
 
