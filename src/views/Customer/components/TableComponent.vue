@@ -11,7 +11,11 @@
                 <div class="flex items-center justify-between gap-x-6 py-5">
                     <div class="min-w-0">
                         <div class="flex items-start gap-x-3">
-                            <p class="text-sm/6 font-semibold text-gray-900">{{ record.name }}</p>
+                            <RouterLink
+                                :to="`/customers/${record.id}/edit`"
+                                class="text-sm/6 font-semibold text-gray-900 hover:text-primary"
+                                >{{ record.name }}</RouterLink
+                            >
                             <p
                                 :class="[
                                     CustomerTypes[record.type],
