@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory, type RouteLocationNormalized, type Router } from 'vue-router';
 import { useAuthService } from '@/composable/useAuthService.ts';
 import AppLayout from '@/layouts/AppLayout.vue';
+import CustomerRoutes from './CustomerRoutes.ts';
+import EstimateRoutes from './EstimateRoutes.ts';
 
 declare module 'vue-router' {
     interface RouteMeta {
@@ -36,28 +38,12 @@ const router: Router = createRouter({
             meta: { requiresAuth: true, layout: AppLayout },
         },
         {
-            path: '/customers',
-            name: 'CustomersIndex',
-            component: () => import('../views/Customer/CustomerIndexView.vue'),
-            meta: { requiresAuth: true, layout: AppLayout },
-        },
-        {
-            path: '/customers/create',
-            name: 'CustomersCreate',
-            component: () => import('../views/Customer/CustomerFormView.vue'),
-            meta: { requiresAuth: true, layout: AppLayout },
-        },
-        {
-            path: '/customers/:id/edit',
-            name: 'CustomersEdit',
-            component: () => import('../views/Customer/CustomerFormView.vue'),
-            meta: { requiresAuth: true, layout: AppLayout },
-        },
-        {
             path: '/:pathMatch(.*)*',
             name: 'NotFound',
             component: import('../views/NotFoundView.vue'),
         },
+        ...CustomerRoutes,
+        ...EstimateRoutes,
     ],
 });
 

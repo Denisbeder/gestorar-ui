@@ -3,7 +3,7 @@
         <Disclosure
             v-slot="{ open }"
             as="nav"
-            class="bg-indigo-600"
+            class="bg-primary"
         >
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="flex h-16 items-center justify-between">
@@ -33,10 +33,10 @@
                         <div class="ml-4 flex items-center md:ml-6">
                             <button
                                 type="button"
-                                class="relative rounded-full bg-indigo-600 p-1 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600"
+                                class="relative rounded-full bg-primary p-1 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary"
                             >
                                 <span class="absolute -inset-1.5" />
-                                <span class="sr-only">View notifications</span>
+                                <span class="sr-only">Ver notificações</span>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
@@ -60,10 +60,10 @@
                             >
                                 <div>
                                     <MenuButton
-                                        class="relative flex max-w-xs items-center rounded-full bg-indigo-600 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600"
+                                        class="relative flex max-w-xs items-center rounded-full bg-primary text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary"
                                     >
                                         <span class="absolute -inset-1.5" />
-                                        <span class="sr-only">Open user menu</span>
+                                        <span class="sr-only">Abri menu do usuário</span>
                                         <img
                                             class="size-8 rounded-full"
                                             :src="user.imageUrl"
@@ -85,7 +85,6 @@
                                         <MenuItem
                                             v-for="item in userNavigation"
                                             :key="item.name"
-                                            v-slot="{ active }"
                                         >
                                             <RouterLink
                                                 :to="item.href"
@@ -103,11 +102,12 @@
                     <div class="-mr-2 flex md:hidden">
                         <!-- Mobile menu button -->
                         <DisclosureButton
-                            class="relative inline-flex items-center justify-center rounded-md bg-indigo-600 p-2 text-indigo-200 hover:bg-indigo-500/75 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600"
+                            class="relative inline-flex items-center justify-center rounded-md bg-primary p-2 text-indigo-200 hover:bg-indigo-500/75 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary"
                         >
                             <span class="absolute -inset-0.5" />
                             <span class="sr-only">Abrir menu principal</span>
                             <svg
+                                v-if="!open"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
@@ -123,6 +123,7 @@
                             </svg>
 
                             <svg
+                                v-else
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
@@ -170,10 +171,10 @@
                         </div>
                         <button
                             type="button"
-                            class="relative ml-auto shrink-0 rounded-full bg-indigo-600 p-1 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-600"
+                            class="relative ml-auto shrink-0 rounded-full bg-primary p-1 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary"
                         >
                             <span class="absolute -inset-1.5" />
-                            <span class="sr-only">View notifications</span>
+                            <span class="sr-only">Ver notificações</span>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -231,12 +232,12 @@
 
     const navigation = [
         { name: 'Visão geral', href: '/dashboard', current: route.path === '/dashboard' },
-        { name: 'Clientes', href: '/customers', current: route.path === '/customers' },
-        { name: 'Fornecedores', href: '/suppliers', current: false },
+        { name: 'Orçamentos', href: '/estimates', current: false },
         { name: 'Ordem de serviços', href: '/work-orders', current: false },
-        { name: 'Orçamentos', href: '/budgets', current: false },
         { name: 'Caixa', href: '/treasures', current: false },
         { name: 'Calendário', href: '/calendar', current: false },
+        { name: 'Fornecedores', href: '/suppliers', current: false },
+        { name: 'Clientes', href: '/customers', current: route.path === '/customers' },
         { name: 'Relatórios', href: '/reports', current: false },
     ];
 

@@ -8,7 +8,6 @@
     import LoadingComponent from '@/components/LoadingComponent.vue';
     import PageContentComponent from '@/components/PageContentComponent.vue';
     import PageHeaderComponent from '@/components/PageHeaderComponent.vue';
-    import DialogComponent from '@/components/DialogComponent.vue';
     import TableComponent from '@/views/Customer/components/TableComponent.vue';
     import { useConfirmDialog } from '@vueuse/core';
     import ConfirmDialogComponent from '@/components/ConfirmDialogComponent.vue';
@@ -127,51 +126,3 @@
         @on-cancel="cancel"
     />
 </template>
-
-<style lang="scss" scoped>
-    .list-wrapper {
-        padding: 0;
-        list-style: none;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-
-        .list-item {
-            border: solid 1px #ccc;
-            padding: 1rem;
-            background-color: #fff;
-            display: flex;
-            align-items: center;
-
-            .list-text {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-
-                span {
-                    background-color: #ddd;
-                    padding: 0.15rem 0.25rem;
-                    border-radius: 0.25rem;
-                    text-transform: uppercase;
-                    font-size: 10px;
-
-                    &.cpf {
-                        background-color: yellowgreen;
-                        color: white;
-                    }
-
-                    &.cnpj {
-                        background-color: darkslateblue;
-                        color: white;
-                    }
-                }
-            }
-
-            .actions {
-                margin-left: auto;
-                display: flex;
-                gap: 0.5rem;
-            }
-        }
-    }
-</style>
