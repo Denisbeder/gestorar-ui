@@ -5,6 +5,8 @@
     import { displayError } from '@/utils.ts';
     import ConfirmDialogComponent from '@/components/ConfirmDialogComponent.vue';
     import type { AxiosResponse } from 'axios';
+    import LoadingComponent from '@/components/LoadingComponent.vue';
+    import PaginationComponent from '@/components/PaginationComponent.vue';
 
     type PropsType = {
         service: TableServiceType;
@@ -84,11 +86,20 @@
 </script>
 
 <template>
-    <slot
-        :records="records"
-        :loading="loading"
-        :page-change="onPageChange"
-    />
+    <LoadingComponent :loading="loading">
+        <slot
+            :records="records"
+            :loading="loading"
+            :page-change="onPageChange"
+        />
+
+        <PaginationComponent
+            v-if="records?.total"
+            class="-mx-6"
+            :total="records?.total"
+            @on-change="onPageChange"
+        />
+    </LoadingComponent>
 
     <ConfirmDialogComponent
         :open="isRevealed"
