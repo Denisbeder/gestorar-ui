@@ -101,3 +101,11 @@ type CustomerFormType = {
     type: CustomerTypeType;
 } & PeopleModelType &
     CompanyModelType;
+
+type TableServiceType = {
+    index?: (params?: Record<string, string | number>) => Promise<AxiosResponse<PaginationDataType>>;
+    store?: (payload: CustomerFormType) => Promise<AxiosResponse>;
+    find?: (id: number) => Promise<AxiosResponse>;
+    update?: (id: number, payload: CustomerFormType) => Promise<AxiosResponse>;
+    destroy?: (id: number) => Promise<AxiosResponse>;
+};

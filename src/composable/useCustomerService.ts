@@ -1,7 +1,15 @@
 import { useHTTP } from '@/composable/useHTTP.ts';
 import type { AxiosResponse } from 'axios';
 
-export function useCustomerService() {
+type CustomerService = {
+    store: (payload: CustomerFormType) => Promise<AxiosResponse<CustomerModelType>>;
+    update: (id: number, payload: CustomerFormType) => Promise<AxiosResponse<CustomerModelType>>;
+    find: (id: number) => Promise<AxiosResponse<CustomerModelType>>;
+    destroy: (id: number) => Promise<AxiosResponse>;
+    index: (params?: Record<string, string | number>) => Promise<AxiosResponse<PaginationDataType<CustomerModelType>>>;
+};
+
+export function useCustomerService(): CustomerService {
     const http = useHTTP();
     const basePath = '/api/customers';
 

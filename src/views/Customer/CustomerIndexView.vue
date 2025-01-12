@@ -1,81 +1,13 @@
 <script setup lang="ts">
-    import { onBeforeUnmount, onMounted, ref } from 'vue';
     import { useCustomerService } from '@/composable/useCustomerService.ts';
-    import type { AxiosResponse } from 'axios';
-    import { useRoute } from 'vue-router';
-    import { displayError } from '@/utils.ts';
     import PaginationComponent from '@/components/PaginationComponent.vue';
-    import LoadingComponent from '@/components/LoadingComponent.vue';
     import PageContentComponent from '@/components/PageContentComponent.vue';
     import PageHeaderComponent from '@/components/PageHeaderComponent.vue';
-    import TableComponent from '@/views/Customer/components/TableComponent.vue';
-    import { useConfirmDialog } from '@vueuse/core';
-    import ConfirmDialogComponent from '@/components/ConfirmDialogComponent.vue';
+    import TableComponent from '@/components/Table/TableComponent.vue';
+    import TableContentComponent from '@/views/Customer/components/TableContentComponent.vue';
+    import LoadingComponent from '@/components/LoadingComponent.vue';
 
-    const route = useRoute();
     const customerService = useCustomerService();
-    const { isRevealed, reveal, confirm, cancel } = useConfirmDialog();
-
-    const loading = ref<boolean>(false);
-    const processingRecords = ref<number[]>([]);
-    const customers = ref<PaginationDataType<CustomerModelType> | null>(null);
-    const timeouts = ref<ReturnType<typeof setTimeout>[]>([]);
-
-    function loadCustomers(params?: Record<string, string | number>, silent = false) {
-        loading.value = !silent;
-
-        customerService
-            .index(params)
-            .then(({ data }: AxiosResponse<PaginationDataType<CustomerModelType>>) => {
-                customers.value = data;
-            })
-            .catch((error) => displayError(error))
-            .finally(() => (loading.value = false));
-    }
-
-    async function handleDelete(id: number) {
-        const { isCanceled } = await reveal();
-
-        if (isCanceled) {
-            return;
-        }
-
-        removeTimeouts();
-
-        processingRecords.value.push(id);
-
-        customerService
-            .destroy(id)
-            .then(() => {
-                customers.value!.data = customers.value!.data.filter((customer) => customer.id !== id);
-
-                timeouts.value.push(setTimeout(() => loadCustomers({ ...(route.query as object) }, true), 3000));
-            })
-            .catch((error) => displayError(error))
-            .finally(() => {
-                processingRecords.value = processingRecords.value.filter((record) => record !== id);
-            });
-    }
-
-    function onPageChange(page: number) {
-        removeTimeouts();
-
-        loadCustomers({ page });
-    }
-
-    function removeTimeouts() {
-        timeouts.value.forEach((timeout) => clearTimeout(timeout));
-    }
-
-    onMounted(() => {
-        const params = { ...(route.query as object) };
-
-        loadCustomers(params);
-    });
-
-    onBeforeUnmount(() => {
-        removeTimeouts();
-    });
 </script>
 
 <template>
@@ -99,30 +31,22 @@
     </PageHeaderComponent>
 
     <PageContentComponent>
-        <LoadingComponent
-            class="min-h-[30svh]"
-            :loading="loading"
-        >
-            <div class="bg-white rounded px-6">
-                <TableComponent
-                    :records="customers?.data"
-                    :processing-records="processingRecords"
-                    @on-delete="handleDelete"
-                />
+        <div class="bg-white rounded px-6">
+            <TableComponent
+                v-slot="{ loading, records, pageChange }"
+                :service="customerService"
+            >
+                <LoadingComponent :loading="loading">
+                    <TableContentComponent :records="records?.data" />
 
-                <PaginationComponent
-                    v-if="customers?.total"
-                    class="-mx-6"
-                    :total="customers?.total"
-                    @on-change="onPageChange"
-                />
-            </div>
-        </LoadingComponent>
+                    <PaginationComponent
+                        v-if="records?.total"
+                        class="-mx-6"
+                        :total="records?.total"
+                        @on-change="pageChange"
+                    />
+                </LoadingComponent>
+            </TableComponent>
+        </div>
     </PageContentComponent>
-
-    <ConfirmDialogComponent
-        :open="isRevealed"
-        @on-confirm="confirm"
-        @on-cancel="cancel"
-    />
 </template>
