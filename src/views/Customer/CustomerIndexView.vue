@@ -29,7 +29,7 @@
     </PageHeaderComponent>
 
     <PageContentComponent>
-        <div class="bg-white rounded px-6">
+        <div class="bg-white rounded-md px-6">
             <TableComponent
                 v-slot="{ records }"
                 :service="customerService"

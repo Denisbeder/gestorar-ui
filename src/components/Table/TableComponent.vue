@@ -86,7 +86,7 @@
 </script>
 
 <template>
-    <LoadingComponent :loading="loading">
+    <LoadingComponent :loading="loading" class="min-h-[30vh]">
         <slot
             :records="records"
             :loading="loading"
