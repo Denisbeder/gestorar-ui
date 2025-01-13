@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, type RouteLocationNormalized, type Rout
 import { useAuthService } from '@/composable/useAuthService.ts';
 import AppLayout from '@/layouts/AppLayout.vue';
 import CustomerRoutes from './CustomerRoutes.ts';
-import EstimateRoutes from './EstimateRoutes.ts';
+import WorkOrderRoutes from './WorkOrderRoutes.ts';
 
 declare module 'vue-router' {
     interface RouteMeta {
@@ -43,7 +43,7 @@ const router: Router = createRouter({
             component: import('../views/NotFoundView.vue'),
         },
         ...CustomerRoutes,
-        ...EstimateRoutes,
+        ...WorkOrderRoutes,
     ],
 });
 
