@@ -36,7 +36,7 @@ type PaginationType = {
 };
 
 type PaginationDataType<T = unknown> = {
-    data: T[];
+    data?: T[];
 } & PaginationType;
 
 type AddressTypeType = 'home' | 'commercial' | 'billing';

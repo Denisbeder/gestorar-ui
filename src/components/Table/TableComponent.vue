@@ -27,8 +27,8 @@
 
         props.service
             .index(params)
-            .then(({ data }: AxiosResponse<PaginationDataType>) => {
-                records.value = data;
+            .then((response: AxiosResponse<PaginationDataType>) => {
+                records.value = response?.data;
             })
             .catch((error) => displayError(error))
             .finally(() => (loading.value = false));
