@@ -23,7 +23,7 @@ export function useHTTP() {
     http.interceptors.response.use(
         (config) => Promise.resolve(config),
         (error) => {
-            if (error.response.status === 401 && error.response.config.url !== '/api/user') {
+            if (error.response?.status === 401 && error.response.config.url !== '/api/user') {
                 window.location.reload();
                 return;
             }
