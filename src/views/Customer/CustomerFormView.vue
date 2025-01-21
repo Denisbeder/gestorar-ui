@@ -154,7 +154,7 @@
 
 <template>
     <form @submit.prevent="onSubmit">
-        <PageHeaderComponent :title="editMode ? 'Editar cliente' : 'Cadastrar cliente'">
+        <PageHeaderComponent :title="editMode ? 'Editar Cliente' : 'Cadastrar Cliente'">
             <template #rightCol>
                 <RouterLink
                     to="/customers"
@@ -181,9 +181,9 @@
         <PageContentComponent>
             <LoadingComponent :loading="loading">
                 <div class="flex flex-col gap-y-12">
-                    <div class="card-container">
+                    <div class="form-card-container">
                         <div>
-                            <h2 class="card-title">Tipo de cliente</h2>
+                            <h2 class="form-card-title">Tipo de cliente</h2>
                         </div>
 
                         <div
@@ -242,12 +242,12 @@
 
                     <div
                         v-if="form.type === 'cpf'"
-                        class="card-container"
+                        class="form-card-container"
                     >
                         <div>
-                            <h2 class="card-title">Dados da Pessoa</h2>
+                            <h2 class="form-card-title">Dados da Pessoa</h2>
                         </div>
-                        <div class="card card--grid">
+                        <div class="form-card form-card--grid">
                             <div class="sm:col-span-3">
                                 <label
                                     for="first-name"
@@ -303,12 +303,12 @@
 
                     <div
                         v-if="form.type === 'cnpj'"
-                        class="card-container"
+                        class="form-card-container"
                     >
                         <div>
-                            <h2 class="card-title">Dados da Empresa</h2>
+                            <h2 class="form-card-title">Dados da Empresa</h2>
                         </div>
-                        <div class="card card--grid">
+                        <div class="form-card form-card--grid">
                             <div class="sm:col-span-3">
                                 <label
                                     for="name"
@@ -362,11 +362,11 @@
                         </div>
                     </div>
 
-                    <div class="card-container">
+                    <div class="form-card-container">
                         <div>
-                            <h2 class="card-title">Contatos</h2>
+                            <h2 class="form-card-title">Contatos</h2>
                         </div>
-                        <div class="card flex flex-col gap-8">
+                        <div class="form-card flex flex-col gap-8">
                             <div
                                 v-for="(contact, index) in form.contacts"
                                 :key="`contact_${index}`"
@@ -453,11 +453,11 @@
                         </div>
                     </div>
 
-                    <div class="card-container">
+                    <div class="form-card-container">
                         <div>
-                            <h2 class="card-title">Endereços</h2>
+                            <h2 class="form-card-title">Endereços</h2>
                         </div>
-                        <div class="card flex flex-col gap-8">
+                        <div class="form-card flex flex-col gap-8">
                             <div
                                 v-for="(address, index) in form.addresses"
                                 :key="`contact_${index}`"
@@ -652,21 +652,3 @@
         </PageContentComponent>
     </form>
 </template>
-
-<style lang="scss" scoped>
-    .card-container {
-        @apply grid grid-cols-1 sm:grid-cols-[300px_1fr] gap-y-4;
-    }
-
-    .card {
-        @apply -mx-4 sm:mx-0 px-4 py-6 sm:p-8 bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl;
-
-        &--grid {
-            @apply grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6;
-        }
-    }
-
-    .card-title {
-        @apply text-base/7 font-semibold text-gray-900;
-    }
-</style>

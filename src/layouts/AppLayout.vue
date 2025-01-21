@@ -235,7 +235,6 @@
         { name: 'Ordem de serviços', href: '/work-orders', current: false },
         { name: 'Caixa', href: '/treasures', current: false },
         { name: 'Calendário', href: '/calendar', current: false },
-        { name: 'Serviços', href: '/services', current: false },
         { name: 'Fornecedores', href: '/suppliers', current: false },
         { name: 'Clientes', href: '/customers', current: route.path === '/customers' },
         { name: 'Relatórios', href: '/reports', current: false },
