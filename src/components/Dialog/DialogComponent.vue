@@ -1,3 +1,23 @@
+<script lang="ts" setup>
+    import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue';
+
+    type PropsType = {
+        title?: string;
+        open?: boolean;
+        size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl' | 'full';
+    };
+
+    withDefaults(defineProps<PropsType>(), {
+        size: 'md',
+    });
+
+    const isOpen = defineModel({ type: Boolean, default: false });
+
+    function handleClose() {
+        isOpen.value = false;
+    }
+</script>
+
 <template>
     <TransitionRoot
         appear
@@ -34,7 +54,8 @@
                         leave-to="opacity-0 scale-95"
                     >
                         <DialogPanel
-                            class="w-full max-w-md transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all"
+                            class="w-full transform overflow-hidden rounded-lg bg-white p-4 sm:p-6 text-left align-middle shadow-xl transition-all"
+                            :class="`size-${size}`"
                         >
                             <slot
                                 v-if="$slots.header"
@@ -44,7 +65,7 @@
                             <DialogTitle
                                 v-if="title && !$slots.header"
                                 as="h3"
-                                class="text-lg font-medium leading-6 text-gray-900"
+                                class="text-lg font-medium leading-6 text-gray-900 mb-0"
                             >
                                 {{ title }}
                             </DialogTitle>
@@ -63,19 +84,48 @@
     </TransitionRoot>
 </template>
 
-<script lang="ts" setup>
-    import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue';
-
-    type PropsType = {
-        title?: string;
-        open?: boolean;
-    };
-
-    defineProps<PropsType>();
-
-    const isOpen = defineModel({ type: Boolean, default: false });
-
-    function handleClose() {
-        isOpen.value = false;
+<style>
+    .size-sm {
+        @apply max-w-sm;
     }
-</script>
+
+    .size-md {
+        @apply max-w-md;
+    }
+
+    .size-lg {
+        @apply max-w-lg;
+    }
+
+    .size-xl {
+        @apply max-w-xl;
+    }
+
+    .size-2xl {
+        @apply max-w-2xl;
+    }
+
+    .size-3xl {
+        @apply max-w-3xl;
+    }
+
+    .size-4xl {
+        @apply max-w-4xl;
+    }
+
+    .size-5xl {
+        @apply max-w-5xl;
+    }
+
+    .size-6xl {
+        @apply max-w-6xl;
+    }
+
+    .size-7xl {
+        @apply max-w-7xl;
+    }
+
+    .size-full {
+        @apply max-w-full;
+    }
+</style>

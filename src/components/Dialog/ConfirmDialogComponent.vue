@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import DialogComponent from '@/components/DialogComponent.vue';
+    import DialogComponent from '@/components/Dialog/DialogComponent.vue';
 
     type PropsType = {
         open: boolean;

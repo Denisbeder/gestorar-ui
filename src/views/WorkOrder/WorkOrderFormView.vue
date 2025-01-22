@@ -4,45 +4,49 @@
     import ArrowNarrowLeft from '@/components/Icons/ArrowNarrowLeft.vue';
     import LoaderIcon from '@/components/Icons/LoaderIcon.vue';
     import PageHeaderComponent from '@/components/PageHeaderComponent.vue';
-    import { useRoute, useRouter } from 'vue-router';
     import { useCustomerService } from '@/composable/useCustomerService.ts';
-    import { reactive, ref, computed } from 'vue';
-    import {
-        Combobox,
-        ComboboxButton,
-        ComboboxInput,
-        ComboboxOption,
-        ComboboxOptions,
-        TransitionRoot,
-    } from '@headlessui/vue';
-    import CheckIcon from '@/components/Icons/CheckIcon.vue';
-    import SelectorIcon from '@/components/Icons/SelectorIcon.vue';
+    import { onMounted, reactive, ref } from 'vue';
     import PlusIcon from '@/components/Icons/PlusIcon.vue';
     import SelectCombo from '@/components/SelectCombo.vue';
+    import DialogComponent from '@/components/Dialog/DialogComponent.vue';
+    import CustomerFormInputsComponent from '@/views/Customer/components/CustomerFormInputsComponent.vue';
+    import DialogContentComponent from '@/components/Dialog/DialogContentComponent.vue';
 
     type WorkOrderFormType = {
         customer_id: number | null;
     };
 
-    const route = useRoute();
-    const router = useRouter();
     const customerService = useCustomerService();
 
-    const customerList = [
+    const openCustomerDialog = ref<boolean>(false);
+    const customers = ref([
         { id: 1, name: 'Wade Cooper' },
         { id: 2, name: 'Arlene Mccoy' },
         { id: 3, name: 'Devon Webb' },
         { id: 4, name: 'Tom Cook' },
         { id: 5, name: 'Tanya Fox' },
         { id: 6, name: 'Hellen Schmidt' },
-    ];
+    ]);
+    const customerForm = reactive<CustomerFormType>({
+        type: 'cpf',
+        first_name: '',
+        last_name: '',
+        cpf: null,
+        cnpj: null,
+        name: '',
+        legal_name: '',
+        addresses: [],
+        contacts: [],
+    });
 
     const loading = ref<boolean>(false);
     const submitting = ref<boolean>(false);
     const editMode = ref<boolean>(false);
     const form = reactive<WorkOrderFormType>({
-        customer_id: customerList[3],
+        customer_id: null,
     });
+
+    onMounted(() => {});
 </script>
 
 <template>
@@ -82,7 +86,7 @@
                             <div class="sm:col-span-3">
                                 <SelectCombo
                                     v-model="form.customer_id"
-                                    :options="customerList"
+                                    :options="customers"
                                 />
                             </div>
 
@@ -90,6 +94,7 @@
                                 type="button"
                                 class="btn btn--white"
                                 title="Cadastrar novo cliente"
+                                @click="openCustomerDialog = true"
                             >
                                 <PlusIcon class="size-5" />
                                 Novo Cliente
@@ -98,13 +103,40 @@
 
                         <div class="relative grid grid-cols-[100px_1fr] gap-3 border bg-gray-50 p-4 rounded-md">
                             <div class="label">Nome</div>
-                            <div>Denisbeder</div>
-                            <div class="label">Nome</div>
-                            <div>Denisbeder</div>
+                            <div>Denisbeder Duek Carvalho</div>
+
+                            <div class="label">CPF</div>
+                            <div>024.852.511-50</div>
+
+                            <div class="label">Telefone</div>
+                            <div>(67) 99694-8065 <small>(Whatsapp)</small></div>
+
+                            <div class="label">E-mail</div>
+                            <div>denisbeder@gmail.com</div>
+
+                            <div class="label">Endereço</div>
+                            <div>Rua Clovis Cersozimo de Souza, 5620, 79831-383, Jardim Piratininga, Dourados-MS</div>
                         </div>
                     </div>
                 </div>
             </LoadingComponent>
         </PageContentComponent>
     </form>
+
+    <DialogComponent
+        v-model="openCustomerDialog"
+        title="Cadastrar novo cliente"
+        size="5xl"
+    >
+        <DialogContentComponent
+            class="bg-gray-50"
+            :border-top="true"
+        >
+            <CustomerFormInputsComponent
+                v-model="customerForm"
+                :submitting="submitting"
+                :edit-mode="false"
+            />
+        </DialogContentComponent>
+    </DialogComponent>
 </template>

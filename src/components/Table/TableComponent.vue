@@ -3,7 +3,7 @@
     import { useRoute } from 'vue-router';
     import { useConfirmDialog } from '@vueuse/core';
     import { displayError } from '@/utils.ts';
-    import ConfirmDialogComponent from '@/components/ConfirmDialogComponent.vue';
+    import ConfirmDialogComponent from '@/components/Dialog/ConfirmDialogComponent.vue';
     import type { AxiosResponse } from 'axios';
     import LoadingComponent from '@/components/LoadingComponent.vue';
     import PaginationComponent from '@/components/PaginationComponent.vue';
@@ -86,7 +86,10 @@
 </script>
 
 <template>
-    <LoadingComponent :loading="loading" class="min-h-[30vh]">
+    <LoadingComponent
+        :loading="loading"
+        class="min-h-[30vh]"
+    >
         <slot
             :records="records"
             :loading="loading"
