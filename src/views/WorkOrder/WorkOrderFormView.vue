@@ -19,14 +19,7 @@
     const customerService = useCustomerService();
 
     const openCustomerDialog = ref<boolean>(false);
-    const customers = ref([
-        { id: 1, name: 'Wade Cooper' },
-        { id: 2, name: 'Arlene Mccoy' },
-        { id: 3, name: 'Devon Webb' },
-        { id: 4, name: 'Tom Cook' },
-        { id: 5, name: 'Tanya Fox' },
-        { id: 6, name: 'Hellen Schmidt' },
-    ]);
+    const customers = ref([]);
     const customerForm = reactive<CustomerFormType>({
         type: 'cpf',
         first_name: '',
@@ -46,7 +39,21 @@
         customer_id: null,
     });
 
-    onMounted(() => {});
+    function loadCustomers() {
+        loading.value = true;
+        customerService
+            .index()
+            .then((response: AxiosResponse) => {
+                customers.value = response.data?.data ?? [];
+            })
+            .finally(() => {
+                loading.value = false;
+            });
+    }
+
+    onMounted(() => {
+        loadCustomers();
+    });
 </script>
 
 <template>
@@ -137,8 +144,10 @@
                 :submitting="submitting"
                 :edit-mode="false"
             />
+        </DialogContentComponent>
 
-            <div class="mt-4 sm:mt-6 sm:flex sm:flex-row-reverse">
+        <template #footer>
+            <div class="mt-4 sm:mt-6 pt-4 sm:pt-6 px-4 sm:px-6 sm:flex sm:flex-row-reverse border-t -mx-4 sm:-mx-6">
                 <button
                     type="button"
                     class="w-full sm:ml-3 sm:w-auto btn btn--primary"
@@ -154,6 +163,6 @@
                     Cancelar
                 </button>
             </div>
-        </DialogContentComponent>
+        </template>
     </DialogComponent>
 </template>
