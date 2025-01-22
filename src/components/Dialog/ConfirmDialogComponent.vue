@@ -25,7 +25,7 @@
         </div>
 
         <template #footer>
-            <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+            <div class="mt-4 sm:mt-6 sm:flex sm:flex-row-reverse">
                 <button
                     type="button"
                     class="w-full sm:ml-3 sm:w-auto btn btn--primary"

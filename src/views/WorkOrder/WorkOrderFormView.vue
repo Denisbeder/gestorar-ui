@@ -137,6 +137,23 @@
                 :submitting="submitting"
                 :edit-mode="false"
             />
+
+            <div class="mt-4 sm:mt-6 sm:flex sm:flex-row-reverse">
+                <button
+                    type="button"
+                    class="w-full sm:ml-3 sm:w-auto btn btn--primary"
+                    @click="openCustomerDialog = true"
+                >
+                    Salvar
+                </button>
+                <button
+                    type="button"
+                    class="mt-3 w-full sm:mt-0 sm:w-auto btn btn--white"
+                    @click="openCustomerDialog = false"
+                >
+                    Cancelar
+                </button>
+            </div>
         </DialogContentComponent>
     </DialogComponent>
 </template>

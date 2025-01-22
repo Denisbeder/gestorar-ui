@@ -339,7 +339,7 @@
 
                 <button
                     type="button"
-                    class="btn btn--primary"
+                    class="btn btn--primary-soft"
                     :disabled="submitting"
                     @click="handleAddContact"
                 >
@@ -534,7 +534,7 @@
 
                 <button
                     type="button"
-                    class="btn btn--primary"
+                    class="btn btn--primary-soft"
                     :disabled="submitting"
                     @click="handleAddAddress"
                 >

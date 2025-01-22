@@ -49,12 +49,20 @@
           @apply bg-transparent hover:bg-primary/[.05] text-primary ring-primary focus-visible:outline-primary;
         }
 
+        &--primary-soft {
+          @apply text-primary bg-primary/10 hover:bg-primary/15 ring-transparent focus-visible:outline-primary;
+        }
+
         &--danger {
           @apply bg-danger hover:bg-danger/85 text-white shadow-sm focus-visible:outline-danger;
         }
 
         &--danger-outline {
           @apply bg-transparent hover:bg-danger/[.05] text-danger ring-danger focus-visible:outline-danger;
+        }
+
+        &--danger-soft {
+          @apply text-danger bg-danger/10 hover:bg-danger/15 ring-transparent focus-visible:outline-danger;
         }
     }
 
@@ -70,8 +78,15 @@
       }
 
       &--checked {
-        @apply bg-primary text-white ring-0 hover:bg-indigo-500;
+        @apply bg-primary text-white ring-0 ring-offset-0 ring-transparent hover:bg-primary/85;
       }
+
+      &--soft {
+        &.radio-group--checked {
+          @apply bg-primary/10 text-primary ring-0 ring-offset-0 ring-transparent hover:bg-primary/15;
+        }
+      }
+
     }
 
     .form-input {
