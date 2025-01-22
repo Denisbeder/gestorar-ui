@@ -20,13 +20,14 @@
     const loading = ref<boolean>(false);
     const records = ref<PaginationDataType | null>(null);
     const processingRecords = ref<number[]>([]);
-    const timeouts = ref<ReturnType<typeof setTimeout>[]>([]);
+    const timeouts = ref<number[]>([]);
+    const abortControllers = ref([]);
 
     function loadRecords(params?: Record<string, string | number>, silent = false) {
         loading.value = !silent;
 
         props.service
-            .index(params)
+            .index(params, { signal: newAbortController().signal })
             .then((response: AxiosResponse<PaginationDataType>) => {
                 records.value = response?.data;
             })
@@ -46,7 +47,7 @@
         processingRecords.value.push(id);
 
         try {
-            await props.service.destroy(id);
+            await props.service.destroy(id, { signal: newAbortController().signal });
             records.value!.data = records.value!.data.filter((record) => record.id !== id);
 
             timeouts.value.push(setTimeout(() => loadRecords({ ...(route.query as object) }, true), 3000));
@@ -63,8 +64,20 @@
         loadRecords({ page });
     }
 
+    function newAbortController() {
+        const controller = new AbortController();
+
+        abortControllers.value.push(controller);
+
+        return controller;
+    }
+
     function removeTimeouts() {
         timeouts.value.forEach((timeout) => clearTimeout(timeout));
+    }
+
+    function cancelRequests() {
+        abortControllers.value.forEach((controller) => controller.abort());
     }
 
     onMounted(() => {
@@ -75,6 +88,7 @@
 
     onBeforeUnmount(() => {
         removeTimeouts();
+        cancelRequests();
     });
 
     provide('table', {

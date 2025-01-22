@@ -5,6 +5,10 @@ export function displayError(
     payload: string | AxiosError<AxiosErrorDataType>,
     options: ToastType | ToastOptions = 'error',
 ) {
+    if (payload.code === 'ERR_CANCELED') {
+        return;
+    }
+
     const toastConfig: ToastOptions = typeof options === 'string' ? { type: options } : options;
 
     if (typeof payload === 'string') {

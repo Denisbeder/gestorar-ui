@@ -13,26 +13,34 @@ export function useCustomerService(): CustomerService {
     const http = useHTTP();
     const basePath = '/api/customers';
 
-    function store(payload: CustomerFormType): Promise<AxiosResponse<CustomerModelType>> {
-        return http.post(basePath, payload);
+    function store(
+        payload: CustomerFormType,
+        config?: Record<string, string | number>,
+    ): Promise<AxiosResponse<CustomerModelType>> {
+        return http.post(basePath, payload, config);
     }
 
-    function update(id: number, payload: CustomerFormType): Promise<AxiosResponse<CustomerModelType>> {
-        return http.put(`${basePath}/${id}`, payload);
+    function update(
+        id: number,
+        payload: CustomerFormType,
+        config?: Record<string, string | number>,
+    ): Promise<AxiosResponse<CustomerModelType>> {
+        return http.put(`${basePath}/${id}`, payload, config);
     }
 
-    function find(id: number): Promise<AxiosResponse<CustomerModelType>> {
-        return http.get(`${basePath}/${id}`);
+    function find(id: number, config?: Record<string, string | number>): Promise<AxiosResponse<CustomerModelType>> {
+        return http.get(`${basePath}/${id}`, config);
     }
 
-    function destroy(id: number): Promise<AxiosResponse> {
-        return http.delete(`${basePath}/${id}`);
+    function destroy(id: number, config?: Record<string, string | number>): Promise<AxiosResponse> {
+        return http.delete(`${basePath}/${id}`, config);
     }
 
     function index(
         params?: Record<string, string | number>,
+        config?: Record<string, string | number>,
     ): Promise<AxiosResponse<PaginationDataType<CustomerModelType>>> {
-        return http.get(basePath, { params });
+        return http.get(basePath, { params, ...config });
     }
 
     return { store, update, find, destroy, index };
