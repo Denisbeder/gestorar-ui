@@ -20,6 +20,7 @@
     const loading = ref<boolean>(false);
     const records = ref<PaginationDataType | null>(null);
     const processingRecords = ref<number[]>([]);
+    const timeoutPromises = ref<() => void[]>([]);
     const timeouts = ref<number[]>([]);
     const abortControllers = ref([]);
 
@@ -43,14 +44,14 @@
         }
 
         removeTimeouts();
-
+        timeoutPromises.value.push(() => loadRecords({ ...(route.query as object) }, true));
         processingRecords.value.push(id);
 
         try {
             await props.service.destroy(id, { signal: newAbortController().signal });
             records.value!.data = records.value!.data.filter((record) => record.id !== id);
 
-            timeouts.value.push(setTimeout(() => loadRecords({ ...(route.query as object) }, true), 3000));
+            timeoutPromises.value.forEach((promise) => timeouts.value.push(setTimeout(promise, 3000)));
         } catch (error) {
             displayError(error);
         } finally {
@@ -73,6 +74,7 @@
     }
 
     function removeTimeouts() {
+        timeoutPromises.value = [];
         timeouts.value.forEach((timeout) => clearTimeout(timeout));
     }
 
