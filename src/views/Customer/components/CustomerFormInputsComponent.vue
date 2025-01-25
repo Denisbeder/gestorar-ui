@@ -2,7 +2,7 @@
     import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
     import PlusIcon from '@/components/Icons/PlusIcon.vue';
     import XIcon from '@/components/Icons/XIcon.vue';
-    import { PropType } from 'vue';
+    import { type PropType } from 'vue';
 
     const CustomerTypes = {
         cpf: 'text-green-700 bg-green-50 ring-green-600/20',
@@ -17,7 +17,7 @@
     defineProps<PropsType>();
 
     const form = defineModel({
-        type: Object as PropType<CustomerModelType>,
+        type: Object as PropType<CustomerFormType>,
         required: true,
     });
 

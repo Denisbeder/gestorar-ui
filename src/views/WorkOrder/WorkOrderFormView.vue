@@ -84,6 +84,7 @@
 
         <PageContentComponent>
             <LoadingComponent :loading="loading">
+              <div class="flex flex-col gap-y-12">
                 <div class="form-card-container">
                     <div>
                         <h2 class="form-card-title">Cliente</h2>
@@ -94,6 +95,7 @@
                                 <SelectCombo
                                     v-model="form.customer_id"
                                     :options="customers"
+                                    :disabled="submitting"
                                 />
                             </div>
 
@@ -126,6 +128,92 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="form-card-container">
+                    <div>
+                        <h2 class="form-card-title">Dados da Ordem de Serviço</h2>
+                    </div>
+                  <div class="form-card form-card--grid">
+                    <div class="sm:col-span-1">
+                      <label
+                        for="code"
+                        class="label"
+                      >
+                        Código
+                      </label>
+                      <input
+                        id="code"
+                        type="text"
+                        name="code"
+                        autocomplete="off"
+                        class="form-input mt-2"
+                        :disabled="submitting"
+                      />
+                    </div>
+
+                    <div class="sm:col-span-1">
+                      <label
+                        for="date"
+                        class="label"
+                      >
+                        Data
+                      </label>
+                      <input
+                        id="date"
+                        type="date"
+                        name="date"
+                        autocomplete="off"
+                        class="form-input mt-2"
+                        :disabled="submitting"
+                      />
+                    </div>
+
+                    <div class="sm:col-span-1">
+                      <label
+                        for="validity"
+                        class="label"
+                      >
+                        Válido até
+                      </label>
+                      <input
+                        id="validity"
+                        type="date"
+                        name="validity"
+                        autocomplete="off"
+                        class="form-input mt-2"
+                        :disabled="submitting"
+                      />
+                    </div>
+
+                    <div class="sm:col-span-6">
+                      <label
+                        for="description"
+                        class="label"
+                      >
+                        Descrição do serviço
+                      </label>
+                      <textarea
+                        id="description"
+                        type="text"
+                        name="description"
+                        autocomplete="off"
+                        class="form-input mt-2"
+                        rows="3"
+                        :disabled="submitting"
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-card-container">
+                  <div>
+                    <h2 class="form-card-title">Items</h2>
+                  </div>
+                  <div class="form-card form-card--grid">
+                    list
+                  </div>
+                </div>
+              </div>
             </LoadingComponent>
         </PageContentComponent>
     </form>
