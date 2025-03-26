@@ -2,7 +2,7 @@
     import LoaderIcon from '@/components/Icons/LoaderIcon.vue';
 
     type PropsType = {
-        loading: boolean;
+        loading?: boolean;
     };
 
     withDefaults(defineProps<PropsType>(), {
