@@ -356,7 +356,7 @@
                 <div
                     v-for="(address, index) in form.addresses"
                     :key="`contact_${index}`"
-                    class="relative grid grid-col-1 sm:grid-cols-6 gap-3 border bg-gray-50 p-4 rounded-md"
+                    class="relative grid grid-cols-1 sm:grid-cols-6 gap-3 border bg-gray-50 p-4 rounded-md"
                 >
                     <div class="sm:col-span-1">
                         <label

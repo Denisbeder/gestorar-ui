@@ -11,9 +11,27 @@
     import DialogComponent from '@/components/Dialog/DialogComponent.vue';
     import CustomerFormInputsComponent from '@/views/Customer/components/CustomerFormInputsComponent.vue';
     import DialogContentComponent from '@/components/Dialog/DialogContentComponent.vue';
+    import type {AxiosResponse} from "axios";
+    import XIcon from "@/components/Icons/XIcon.vue";
 
     type WorkOrderFormType = {
         customer_id: number | null;
+        code: string | null;
+        date: string | null;
+        validity: string | null;
+        description: string | null;
+        items: WorkOrderFormItemsType[];
+        attachments: WorkOrderFormAttachmentsType[];
+    };
+
+    type WorkOrderFormItemsType = {
+      description: string;
+      quantity: number;
+      price: string;
+    };
+
+    type WorkOrderFormAttachmentsType = {
+        file: File;
     };
 
     const customerService = useCustomerService();
@@ -36,7 +54,13 @@
     const submitting = ref<boolean>(false);
     const editMode = ref<boolean>(false);
     const form = reactive<WorkOrderFormType>({
-        customer_id: null,
+      customer_id: null,
+      code: null,
+      date: null,
+      description: null,
+      validity: null,
+      items: [],
+      attachments: [],
     });
 
     function loadCustomers() {
@@ -49,6 +73,23 @@
             .finally(() => {
                 loading.value = false;
             });
+    }
+
+    function onSubmit() {
+        submitting.value = true;
+        console.log(form);
+    }
+
+    function handleAddItem() {
+      form.items.push({
+        description: '',
+        quantity: 1,
+        price: '',
+      });
+    }
+
+    function handleRemoveItem(index: number) {
+      form.items.splice(index, 1);
     }
 
     onMounted(() => {
@@ -143,6 +184,7 @@
                       </label>
                       <input
                         id="code"
+                        v-model="form.code"
                         type="text"
                         name="code"
                         autocomplete="off"
@@ -160,6 +202,7 @@
                       </label>
                       <input
                         id="date"
+                        v-model="form.date"
                         type="date"
                         name="date"
                         autocomplete="off"
@@ -177,6 +220,7 @@
                       </label>
                       <input
                         id="validity"
+                        v-model="form.validity"
                         type="date"
                         name="validity"
                         autocomplete="off"
@@ -194,6 +238,7 @@
                       </label>
                       <textarea
                         id="description"
+                        v-model="form.description"
                         type="text"
                         name="description"
                         autocomplete="off"
@@ -209,8 +254,101 @@
                   <div>
                     <h2 class="form-card-title">Items</h2>
                   </div>
-                  <div class="form-card form-card--grid">
-                    list
+                  <div class="form-card flex flex-col gap-8">
+                    <div
+                      v-for="(item, index) in form.items"
+                      :key="`item_${index}`"
+                      class="relative flex gap-5 border bg-gray-50 p-4 rounded-md"
+                    >
+                      <div class="font-bold text-xl text-primary">
+                        {{ index + 1}}
+                      </div>
+
+                      <div class="grid grid-cols-2 sm:grid-cols-6 gap-3 ">
+                        <div class="col-span-full">
+                          <label
+                            for="item-name"
+                            class="label"
+                          >
+                            Descrição do serviço ou produto
+                          </label>
+                          <textarea
+                            id="item-name"
+                            v-model="item.description"
+                            rows="1"
+                            placeholder="Ex: Instalação ar-condicionado 18000 BTUs"
+                            class="form-input mt-2 resize-none"
+                            style="field-sizing: content;"
+                            :name="`item_name[${index}]`"
+                            :disabled="submitting"
+                          ></textarea>
+                        </div>
+
+                        <div class="sm:col-span-1">
+                          <label
+                            for="item-quantity"
+                            class="label"
+                          >
+                            Qtd.
+                          </label>
+                          <input
+                            id="item-quantity"
+                            v-model="item.quantity"
+                            type="number"
+                            autocomplete="off"
+                            class="form-input mt-2"
+                            :name="`item_quantity[${index}]`"
+                            :disabled="submitting"
+                          />
+                        </div>
+
+                        <div class="sm:col-span-1">
+                          <label
+                            for="item-price"
+                            class="label"
+                          >
+                            Preço unitário
+                          </label>
+                          <input
+                            id="item-price"
+                            v-model="item.price"
+                            type="number"
+                            autocomplete="off"
+                            class="form-input mt-2"
+                            :name="`item_price[${index}]`"
+                            :disabled="submitting"
+                          />
+                        </div>
+
+                        <div class="col-span-full md:col-span-1">
+                        <span
+                          for="item-total"
+                          class="label"
+                        >
+                          Total
+                        </span>
+                          <span class="block py-1.5 mt-2 leading-none text-xl font-semibold">R$ 0,00</span>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        title="Remover Item"
+                        class="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 btn btn--square btn--white btn--sm"
+                        @click="handleRemoveItem(index)"
+                      >
+                        <XIcon class="size-8" />
+                      </button>
+                  </div>
+
+                    <button
+                      type="button"
+                      class="btn btn--primary-soft"
+                      :disabled="submitting"
+                      @click="handleAddItem"
+                    >
+                      <PlusIcon class="size-4" /> Add Item
+                    </button>
                   </div>
                 </div>
               </div>
