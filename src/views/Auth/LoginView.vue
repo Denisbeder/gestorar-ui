@@ -145,7 +145,7 @@
                             class="absolute inset-0 flex items-center"
                             aria-hidden="true"
                         >
-                            <div class="w-full border-t border-gray-200" />
+                            <div class="w-full border-t border-gray-300" />
                         </div>
                         <div class="relative flex justify-center text-sm/6 font-medium">
                             <span class="bg-white px-6 text-gray-900">Ou continue com</span>

@@ -40,6 +40,8 @@
 </template>
 
 <style scoped>
+    @reference "@/assets/main.scss";
+
     .loader {
         @apply bg-gray-300;
         width: 48px;

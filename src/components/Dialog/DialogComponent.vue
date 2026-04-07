@@ -26,9 +26,9 @@
     >
         <Dialog
             as="div"
-            @close="handleClose"
             class="relative z-10"
             v-bind="$attrs"
+            @close="handleClose"
         >
             <TransitionChild
                 as="template"
@@ -85,6 +85,8 @@
 </template>
 
 <style>
+    @reference "@/assets/main.scss";
+
     .size-sm {
         @apply max-w-sm;
     }

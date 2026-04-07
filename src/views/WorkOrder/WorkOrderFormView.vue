@@ -151,7 +151,7 @@
                             </button>
                         </div>
 
-                        <div class="relative grid grid-cols-[100px_1fr] gap-3 border bg-gray-50 p-4 rounded-md">
+                        <div class="relative grid grid-cols-[100px_1fr] gap-3 border border-gray-300 bg-gray-50 p-4 rounded-md">
                             <div class="label">Nome</div>
                             <div>Denisbeder Duek Carvalho</div>
 
@@ -258,7 +258,7 @@
                     <div
                       v-for="(item, index) in form.items"
                       :key="`item_${index}`"
-                      class="relative flex gap-5 border bg-gray-50 p-4 rounded-md"
+                      class="relative flex gap-5 border border-gray-300 bg-gray-50 p-4 rounded-md"
                     >
                       <div class="font-bold text-xl text-primary">
                         {{ index + 1}}
@@ -373,7 +373,7 @@
         </DialogContentComponent>
 
         <template #footer>
-            <div class="mt-4 sm:mt-6 pt-4 sm:pt-6 px-4 sm:px-6 sm:flex sm:flex-row-reverse border-t -mx-4 sm:-mx-6">
+            <div class="mt-4 sm:mt-6 pt-4 sm:pt-6 px-4 sm:px-6 sm:flex sm:flex-row-reverse border-t border-gray-300 -mx-4 sm:-mx-6">
                 <button
                     type="button"
                     class="w-full sm:ml-3 sm:w-auto btn btn--primary"

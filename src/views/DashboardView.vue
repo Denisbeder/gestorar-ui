@@ -5,7 +5,7 @@
             <div class="mx-auto flex max-w-7xl flex-wrap items-center gap-6 px-4 sm:flex-nowrap sm:px-6 lg:px-8">
                 <h1 class="text-base/7 font-semibold text-gray-900">Cashflow</h1>
                 <div
-                    class="order-last flex w-full gap-x-8 text-sm/6 font-semibold sm:order-none sm:w-auto sm:border-l sm:border-gray-200 sm:pl-6 sm:text-sm/7"
+                    class="order-last flex w-full gap-x-8 text-sm/6 font-semibold sm:order-none sm:w-auto sm:border-l sm:border-gray-300 sm:pl-6 sm:text-sm/7"
                 >
                     <a
                         href="#"
@@ -132,10 +132,10 @@
                                     >
                                         <time datetime="2023-03-22">Today</time>
                                         <div
-                                            class="absolute inset-y-0 right-full -z-10 w-screen border-b border-gray-200 bg-gray-50"
+                                            class="absolute inset-y-0 right-full -z-10 w-screen border-b border-gray-300 bg-gray-50"
                                         ></div>
                                         <div
-                                            class="absolute inset-y-0 left-0 -z-10 w-screen border-b border-gray-200 bg-gray-50"
+                                            class="absolute inset-y-0 left-0 -z-10 w-screen border-b border-gray-300 bg-gray-50"
                                         ></div>
                                     </th>
                                 </tr>
@@ -296,10 +296,10 @@
                                     >
                                         <time datetime="2023-03-21">Yesterday</time>
                                         <div
-                                            class="absolute inset-y-0 right-full -z-10 w-screen border-b border-gray-200 bg-gray-50"
+                                            class="absolute inset-y-0 right-full -z-10 w-screen border-b border-gray-300 bg-gray-50"
                                         ></div>
                                         <div
-                                            class="absolute inset-y-0 left-0 -z-10 w-screen border-b border-gray-200 bg-gray-50"
+                                            class="absolute inset-y-0 left-0 -z-10 w-screen border-b border-gray-300 bg-gray-50"
                                         ></div>
                                     </th>
                                 </tr>
@@ -376,7 +376,7 @@
                     role="list"
                     class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8"
                 >
-                    <li class="overflow-hidden rounded-xl border border-gray-200">
+                    <li class="overflow-hidden rounded-xl border border-gray-300">
                         <div class="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-6">
                             <img
                                 src="https://tailwindui.com/plus/img/logos/48x48/tuple.svg"
@@ -461,7 +461,7 @@
                             </div>
                         </dl>
                     </li>
-                    <li class="overflow-hidden rounded-xl border border-gray-200">
+                    <li class="overflow-hidden rounded-xl border border-gray-300">
                         <div class="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-6">
                             <img
                                 src="https://tailwindui.com/plus/img/logos/48x48/savvycal.svg"
@@ -546,7 +546,7 @@
                             </div>
                         </dl>
                     </li>
-                    <li class="overflow-hidden rounded-xl border border-gray-200">
+                    <li class="overflow-hidden rounded-xl border border-gray-300">
                         <div class="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-6">
                             <img
                                 src="https://tailwindui.com/plus/img/logos/48x48/reform.svg"
